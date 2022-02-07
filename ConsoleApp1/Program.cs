@@ -10,7 +10,70 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            TestFirstNonRepeatingCharacter();
+            TestLongestPeak();
+        }
+        static void TestLongestPeak()
+        {
+            int[] arr;
+
+
+            arr = new int[] { 5, 4, 3, 2, 1, 2, 10, 12 };
+            Console.WriteLine(Arrays.LongestPeak(arr));
+            Console.WriteLine("Expected: 0 ");
+
+            arr = new int[] { 1, 2, 3, 1 };
+            Console.WriteLine(Arrays.LongestPeak(arr));
+            Console.WriteLine("Expected: 4 ");
+
+
+            arr = new int[] { 1, 2, 3, 3, 4, 0, 10, 6, 5, -1, -3, 2, 3 };
+            Console.WriteLine(Arrays.LongestPeak(arr));
+            Console.WriteLine("Expected: 6 ");
+
+            arr = new int[] { 0, 1 };
+            Console.WriteLine(Arrays.LongestPeak(arr));
+            Console.WriteLine("Expected: 0 ");
+
+            arr = new int[] { 0, 1, 2};
+            Console.WriteLine(Arrays.LongestPeak(arr));
+            Console.WriteLine("Expected: 0 ");
+
+            arr = new int[] { 5, 4, 3 };
+            Console.WriteLine(Arrays.LongestPeak(arr));
+            Console.WriteLine("Expected: 0 ");
+
+            arr = new int[] { 1, 2, 3, 1, 2, 3, 4, 5, 3, 1, 2, 3, 4, 5, 4, 3 };
+            Console.WriteLine(Arrays.LongestPeak(arr));
+            Console.WriteLine("Expected: 7 ");
+
+        }
+        static void TestIsMonotonic()
+        {
+            int[] arr = new int[] { -1, -2, -5, -100, -100, -200, -300, -300 };
+
+            Console.WriteLine(Arrays.IsMonotonic(arr));
+            Console.WriteLine("Expected: True");
+
+
+            arr = new int[] { -1, -2, -5, -100, -100, 200, -300, -300 };
+            Console.WriteLine(Arrays.IsMonotonic(arr));
+            Console.WriteLine("Expected: False");
+
+        }
+        static void TestSmallestDifference()
+        {
+
+            int[] arrayOne = new int[] { -1, 5, 10, 20, 28, 3 };
+            int[] arrayTwo = new int[] { 26, 134, 135, 15, 17 };
+
+            Console.WriteLine(String.Join(",", Arrays.SmallestDifference(arrayOne, arrayTwo)));
+            Console.WriteLine("Expected: 28, 26");
+        }
+        static void TestMoveElementToEnd()
+        {
+            List<int> arr = new List<int> { 2, 1, 2, 2, 2, 3, 4, 2 };
+
+            Console.WriteLine(String.Join(",", Arrays.MoveElementToEnd(arr, 2)));
         }
         /*
 		 * Two Number Sum
