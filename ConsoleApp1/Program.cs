@@ -17,7 +17,7 @@ namespace AlgoTests
 
             BST tree = BstSolution.MinHeightBst(arr);
 
-            int k = 3;
+            int k = 5;
             Console.WriteLine(BstSolution.FindKthLargestValueInBst1(tree, ref k));
 
         }

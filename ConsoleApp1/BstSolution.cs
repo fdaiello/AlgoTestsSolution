@@ -20,20 +20,28 @@ namespace AlgoTests
             return traverse[k - 1];
 
         }
+        /*
+         * BUGGED!!!
+         */
         public static int FindKthLargestValueInBst1(BST tree, ref int k)
         {
+            int p=0;
+
             if (tree.right != null)
-                FindKthLargestValueInBst1(tree.right, ref k);
+                p = FindKthLargestValueInBst1(tree.right, ref k);
+
+            if (k == 1)
+                return p;
 
             k--;
-            if (k == 1)
+            if ( k== 1)
                 return tree.value;
 
-            else if (tree.left != null)
+            if (tree.left != null)
                 return FindKthLargestValueInBst1(tree.left, ref k);
 
-            else
-                return 0;
+            return 0;
+    
         }
         /*
          * https://www.algoexpert.io/questions/Min%20Height%20BST
