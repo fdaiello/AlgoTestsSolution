@@ -6,6 +6,35 @@ namespace AlgoTests
 {
     public static class BstSolution
     {
+
+        /*
+         *  https://www.algoexpert.io/questions/Find%20Kth%20Largest%20Value%20In%20BST
+         */
+        public static int FindKthLargestValueInBst(BST tree, int k)
+        {
+
+            List<int> traverse = new List<int>();
+            traverse = InOrderTraverse(tree, traverse);
+
+            traverse.Reverse();
+            return traverse[k - 1];
+
+        }
+        public static int FindKthLargestValueInBst1(BST tree, ref int k)
+        {
+            if (tree.right != null)
+                FindKthLargestValueInBst1(tree.right, ref k);
+
+            k--;
+            if (k == 1)
+                return tree.value;
+
+            else if (tree.left != null)
+                return FindKthLargestValueInBst1(tree.left, ref k);
+
+            else
+                return 0;
+        }
         /*
          * https://www.algoexpert.io/questions/Min%20Height%20BST
          * 

@@ -9,7 +9,17 @@ namespace AlgoTests
     {
         static void Main(string[] args)
         {
-            TestMinHeightBST();
+            TestFindKthLargestValueInBst1();
+        }
+        static void TestFindKthLargestValueInBst1()
+        {
+            List<int> arr = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+            BST tree = BstSolution.MinHeightBst(arr);
+
+            int k = 3;
+            Console.WriteLine(BstSolution.FindKthLargestValueInBst1(tree, ref k));
+
         }
         static void TestMinHeightBST()
         {
