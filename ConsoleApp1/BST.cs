@@ -115,7 +115,7 @@ namespace AlgoTests
 		}
 		private int MaxValue()
 		{
-			if ( this.right != null)
+			if (this.right != null)
 			{
 				return this.right.MaxValue();
 			}

@@ -1,16 +1,71 @@
-﻿using AlgoTests;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ConsoleApp1
+namespace AlgoTests
 {
     public class Program
     {
         static void Main(string[] args)
         {
-            TestFirstNonRepeatingCharacter();
+            TestValidateBST();
+        }
+        static void TestValidateBST()
+        {
+            BST bst = new BST(10)
+            {
+                left = new BST(5)
+                {
+                    left = new BST(2)
+                    {
+                        left = new BST(1)
+                    },
+                    right = new BST(9)
+                },
+                right = new BST(15)
+                {
+                    right = new BST(22),
+                    left = new BST(9)
+                }
+            };
+
+            Console.WriteLine(BstSolution.ValidateBst(bst));
+            Console.WriteLine("Expected: False");
+
+        }
+        static void TestBSTTraversal()
+        {
+            BST bst = new BST(10)
+            {
+                left = new BST(5)
+                {
+                    left = new BST(2)
+                    {
+                        left = new BST(1)
+                    },
+                    right = new BST(5)
+                },
+                right = new BST(15)
+                {
+                    right = new BST(22)
+                }
+            };
+
+            List<int> arr;
+
+            arr = new List<int>();
+            Console.WriteLine("In Order");
+            Console.WriteLine(String.Join(",",BstSolution.InOrderTraverse(bst,arr)));
+
+            arr = new List<int>();
+            Console.WriteLine("Pre Order");
+            Console.WriteLine(String.Join(",", BstSolution.PreOrderTraverse(bst, arr)));
+
+            arr = new List<int>();
+            Console.WriteLine("Pos Order");
+            Console.WriteLine(String.Join(",", BstSolution.PostOrderTraverse(bst, arr)));
+
         }
         /*
 		 * Two Number Sum
@@ -231,78 +286,6 @@ namespace ConsoleApp1
             Console.WriteLine($"Minimum non constructible change: {NonConstructibleChange(coins)}");
         }
 
-        /*
-        Find Closest Value in BST
-
-        Write a function that takes in a Binary Search Tree (BST) and a target integer
-        value and returns the closest value to that target value contained in the BST.
-
-        You can assume that there will only be one closest value.
-
-        Each BST node has an integer value, a
-        left child node, and a right child node. A node is
-        said to be a valid <span>BST</span> node if and only if it satisfies the BST
-        property: its <span>value</span> is strictly greater than the values of every
-        node to its left; its <span>value</span> is less than or equal to the values
-        of every node to its right; and its children nodes are either valid
-        <span>BST</span> nodes themselves or <span>None</span>
-
-        Sample Input
-
-                  10
-               /     \
-              5      15
-            /   \   /   \
-           2     5 13   22
-         /           \
-        1            14
-
-        target = 12
-        
-        Sample Output: 13
-
-         */
-        public static int FindClosestValueInBst(BST tree, int target)
-        {
-            return FindClosestValueInBstNode(tree, target, tree.value);
-
-        }
-        public static int FindClosestValueInBstNode(BST tree, int target, int lastValue)
-        {
-            if (tree.value == target)
-                return tree.value;
-
-            int closestValue;
-
-            if (Math.Abs(tree.value - target) < Math.Abs(lastValue - target))
-                closestValue = tree.value;
-            else
-                closestValue = lastValue;
-
-            if (target < tree.value)
-                if (tree.left != null)
-                    return FindClosestValueInBstNode(tree.left, target, closestValue);
-                else
-                    return closestValue;
-
-            else
-                if (tree.right != null && tree.right.value > tree.value)
-                return FindClosestValueInBstNode(tree.right, target, closestValue);
-            else
-                return closestValue;
-
-        }
-        public class BST
-        {
-            public int value;
-            public BST left;
-            public BST right;
-
-            public BST(int value)
-            {
-                this.value = value;
-            }
-        }
         public static void TestFindClosestValueInBst()
         {
             BST tree = new BST(10)
@@ -327,7 +310,7 @@ namespace ConsoleApp1
 
             int target = 3;
 
-            Console.WriteLine($"Find Closes Value in BST: {FindClosestValueInBst(tree, target)}");
+            Console.WriteLine($"Find Closes Value in BST: {BstSolution.FindClosestValueInBst(tree, target)}");
 
         }
 
