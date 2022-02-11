@@ -6,6 +6,35 @@ namespace AlgoTests
 {
     public static class BstSolution
     {
+        /*
+         * https://www.algoexpert.io/questions/Min%20Height%20BST
+         * 
+         *    Build a balanced ( min possible height ) BST from given array
+         */
+        public static BST MinHeightBst(List<int> array)
+        {
+
+            if ( array.Count > 0)
+            {
+                int p = array.Count / 2;
+                int m = array[p];
+
+                BST node = new BST(m);
+
+                List<int> arrayL = array.GetRange(0, p);
+                List<int> arrayR = array.GetRange(p+1, array.Count-p-1);
+
+                node.left = MinHeightBst(arrayL);
+                node.right = MinHeightBst(arrayR);
+
+                return node;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
         public static bool ValidateBst(BST tree)
         {
             return ValidateBst(tree, int.MaxValue, int.MinValue);
