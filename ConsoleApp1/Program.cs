@@ -9,7 +9,7 @@ namespace AlgoTests
     {
         static void Main(string[] args)
         {
-            TestFindKthLargestValueInBst1();
+            Dp.TestMaxSubsetSumNoAdjacent();
         }
         static void TestFindKthLargestValueInBst1()
         {
