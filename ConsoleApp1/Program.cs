@@ -9,7 +9,7 @@ namespace AlgoTests
     {
         static void Main(string[] args)
         {
-            Dp.TestMaxSubsetSumNoAdjacent();
+            Dp.TestNumberOfWaysToMakeChange();
         }
     }
 }
