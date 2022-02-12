@@ -6,6 +6,343 @@ namespace AlgoTests
 {
     public static class BstSolution
     {
+        public static void TestFindClosestValueInBst()
+        {
+            BST tree = new BST(10)
+            {
+                left = new BST(5)
+                {
+                    left = new BST(2)
+                    {
+                        left = new BST(1)
+                    },
+                    right = new BST(5)
+                },
+                right = new BST(15)
+                {
+                    left = new BST(13)
+                    {
+                        right = new BST(14)
+                    },
+                    right = new BST(22)
+                }
+            };
+
+            int target = 3;
+
+            Console.WriteLine($"Find Closes Value in BST: {BstSolution.FindClosestValueInBst(tree, target)}");
+
+        }
+
+        /*
+         Branch sum
+
+  Write a function that takes in a Binary Tree and returns a list of its branch
+  sums ordered from leftmost branch sum to rightmost branch sum.
+
+  A branch sum is the sum of all values in a Binary Tree branch. A Binary Tree
+  branch is a path of nodes in a tree that starts at the root node and ends at
+  any leaf node.
+
+  Each <span>BinaryTree</span> node has an integer <span>value</span>, a
+  <span>left</span> child node, and a <span>right</span> child node. Children
+  nodes can either be <span>BinaryTree</span> nodes themselves or
+  <span>None</span> / <span>null</span>.
+
+    Sample Input
+           1
+        /     \
+       2       3
+     /   \    /  \
+    4     5  6    7
+  /   \  /
+ 8    9 10
+
+    Sample Output
+
+[15, 16, 18, 10, 11]
+
+// 15 == 1 + 2 + 4 + 8
+// 16 == 1 + 2 + 4 + 9
+// 18 == 1 + 2 + 5 + 10
+// 10 == 1 + 3 + 6
+// 11 == 1 + 3 + 7
+
+         */
+
+        public static List<int> BranchSums(BinaryTree root)
+        {
+            List<int> listSum = new List<int>();
+            int sum = 0;
+
+            BranchSumsNode(root, listSum, sum);
+
+            return listSum;
+        }
+        public static void BranchSumsNode(BinaryTree node, List<int> listSum, int sum)
+        {
+
+            sum += node.value;
+
+            if (node.left != null)
+            {
+                BranchSumsNode(node.left, listSum, sum);
+            }
+
+            if (node.right != null)
+            {
+                BranchSumsNode(node.right, listSum, sum);
+            }
+
+            if (node.left == null && node.right == null)
+            {
+                listSum.Add(sum);
+            }
+
+        }
+        public class BinaryTree
+        {
+            public int value;
+            public BinaryTree left;
+            public BinaryTree right;
+
+            public BinaryTree(int value)
+            {
+                this.value = value;
+                this.left = null;
+                this.right = null;
+            }
+        }
+        public static void TestBranchsums()
+        {
+            BinaryTree tree = new BinaryTree(1)
+            {
+                value = 1,
+                left = new BinaryTree(2)
+                {
+                    left = new BinaryTree(4)
+                    {
+                        left = new BinaryTree(8),
+                        right = new BinaryTree(9),
+                    },
+                    right = new BinaryTree(5)
+                    {
+                        left = new BinaryTree(10)
+                    },
+                },
+                right = new BinaryTree(3)
+                {
+                    left = new BinaryTree(6),
+                    right = new BinaryTree(7),
+                }
+            };
+
+            Console.WriteLine($"Test Branch sums: [{String.Join(",", BranchSums(tree))}]");
+        }
+
+        /* NODE DEPTHS
+         
+          The distance between a node in a Binary Tree and the tree's root is called the
+        node's depth.
+
+          Write a function that takes in a Binary Tree and returns the sum of its nodes'
+        depths.
+
+          Each <span>BinaryTree</span> node has an integer <span>value</span>, a
+        <span>left</span> child node, and a <span>right</span> child node. Children
+        nodes can either be <span>BinaryTree</span> nodes themselves or
+        None.
+
+        Sample Input
+
+           1
+       /     \
+      2       3
+    /   \   /   \
+   4     5 6     7
+ /   \
+8     9
+
+        Sample Output
+        16
+
+            The depth of the node with value 2 is 1.
+            The depth of the node with value 3 is 1.
+            The depth of the node with value 4 is 2.
+            The depth of the node with value 5 is 2.
+            Etc..
+            Summing all of these depths yields 16.
+         */
+
+        public static int NodeDepths(BinaryTree root)
+        {
+            int sum = 0;
+            int depth = 0;
+            NodeDepthsSum(root, ref sum, depth);
+
+            return sum;
+        }
+        public static void NodeDepthsSum(BinaryTree tree, ref int sum, int depth)
+        {
+            // Increment dept
+            depth++;
+
+            // Check if we have left branch
+            if (tree.left != null)
+            {
+                sum += depth;
+                NodeDepthsSum(tree.left, ref sum, depth);
+            }
+            if (tree.right != null)
+            {
+                sum += depth;
+                NodeDepthsSum(tree.right, ref sum, depth);
+            }
+
+        }
+        public static void TestNodeDepths()
+        {
+            BinaryTree tree = new BinaryTree(1)
+            {
+                value = 1,
+                left = new BinaryTree(2)
+                {
+                    left = new BinaryTree(4)
+                    {
+                        left = new BinaryTree(8),
+                        right = new BinaryTree(9),
+                    },
+                    right = new BinaryTree(5)
+                },
+                right = new BinaryTree(3)
+                {
+                    left = new BinaryTree(6),
+                    right = new BinaryTree(7),
+                }
+            };
+
+            Console.WriteLine($"Node Depths sum: {NodeDepths(tree)}");
+        }
+
+        public static void DEEPFirstSearch_Test1()
+        {
+            Node node = new Node("A")
+            {
+                children = {
+                    new Node ("B")
+                {
+                        children =
+                        {
+                            new Node ("E"),
+                            new Node ("F")
+                            {
+                                children =
+                                {
+                                    new Node ("I"),
+                                    new Node ("J")
+                                }
+                            }
+                        }
+                },
+                    new Node ("C"),
+                    new Node ("D")
+                    {
+                        children =
+                        {
+                            new Node ("G")
+                            {
+                                children = { new Node("K") }
+                            },
+                            new Node ("H")
+                        }
+                    }
+                }
+            };
+
+            List<string> stringList = new List<string>();
+            stringList = node.DepthFirstSearch(stringList);
+
+            Console.WriteLine(String.Join(",", stringList));
+        }
+
+
+        static void TestFindKthLargestValueInBst1()
+        {
+            List<int> arr = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+            BST tree = BstSolution.MinHeightBst(arr);
+
+            int k = 5;
+            Console.WriteLine(BstSolution.FindKthLargestValueInBst1(tree, ref k));
+
+        }
+        static void TestMinHeightBST()
+        {
+            List<int> arr = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+            BST tree = BstSolution.MinHeightBst(arr);
+
+            List<int> arr2 = new List<int>();
+
+            Console.WriteLine(String.Join(",", BstSolution.InOrderTraverse(tree, arr2)));
+
+        }
+        static void TestValidateBST()
+        {
+            BST bst = new BST(10)
+            {
+                left = new BST(5)
+                {
+                    left = new BST(2)
+                    {
+                        left = new BST(1)
+                    },
+                    right = new BST(9)
+                },
+                right = new BST(15)
+                {
+                    right = new BST(22),
+                    left = new BST(9)
+                }
+            };
+
+            Console.WriteLine(BstSolution.ValidateBst(bst));
+            Console.WriteLine("Expected: False");
+
+        }
+        static void TestBSTTraversal()
+        {
+            BST bst = new BST(10)
+            {
+                left = new BST(5)
+                {
+                    left = new BST(2)
+                    {
+                        left = new BST(1)
+                    },
+                    right = new BST(5)
+                },
+                right = new BST(15)
+                {
+                    right = new BST(22)
+                }
+            };
+
+            List<int> arr;
+
+            arr = new List<int>();
+            Console.WriteLine("In Order");
+            Console.WriteLine(String.Join(",", BstSolution.InOrderTraverse(bst, arr)));
+
+            arr = new List<int>();
+            Console.WriteLine("Pre Order");
+            Console.WriteLine(String.Join(",", BstSolution.PreOrderTraverse(bst, arr)));
+
+            arr = new List<int>();
+            Console.WriteLine("Pos Order");
+            Console.WriteLine(String.Join(",", BstSolution.PostOrderTraverse(bst, arr)));
+
+        }
 
         /*
          *  https://www.algoexpert.io/questions/Find%20Kth%20Largest%20Value%20In%20BST
