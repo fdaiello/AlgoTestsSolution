@@ -6,6 +6,61 @@ namespace AlgoTests
 {
     public class Dp
     {
+		#region Levenshtein_Distance
+		/*
+		 * https://www.algoexpert.io/questions/Levenshtein%20Distance
+		 * 
+		 *  Return the minimum number of operations that needs to be perfomed on string 1 so it equals string 2
+		 *  Operations:
+		 *     - insert
+		 *     - delete
+		 *     - change character
+		 */
+		public static int LevenshteinDistance(string str1, string str2)
+		{
+			// Build Memo square Matrix
+			int[,] m = new int[str2.Length + 1, str1.Length + 1];
+			for (int c = 1; c <= str1.Length; c++)
+				m[0, c] = c;
+			for (int r = 1; r <= str2.Length; r++)
+				m[r, 0] = r;
+
+			// Loop  rows - sub strings of str2
+			for ( int r=1; r<= str2.Length; r++)
+            {
+				// Loop columns
+				for ( int c=1; c<= str1.Length; c++) 
+				{
+					// Check minimum to equal substrings
+					if (str1[c-1] == str2[r-1])
+						m[r, c] = m[r - 1, c - 1];
+					else
+						m[r, c] = Math.Min(m[r,c-1],Math.Min(m[r - 1, c], m[r - 1, c - 1])) + 1;
+				}
+            }
+
+			return m[str2.Length, str1.Length];
+		}
+		public static void TestLevenshteinDistance()
+        {
+			string s1 = "abc";
+			string s2 = "yabd";
+			Console.WriteLine(LevenshteinDistance(s1, s2));
+			Console.WriteLine("Expected: 2");
+
+			s1 = "abc";
+			s2 = "ybc";
+			Console.WriteLine(LevenshteinDistance(s1, s2));
+			Console.WriteLine("Expected: 1");
+
+			s1 = "abc";
+			s2 = "abdy";
+			Console.WriteLine(LevenshteinDistance(s1, s2));
+			Console.WriteLine("Expected: 2");
+
+
+		}
+		#endregion
 		/*
 		 * Minimum coins to make a change
 		 * https://www.algoexpert.io/questions/Min%20Number%20Of%20Coins%20For%20Change
@@ -72,7 +127,7 @@ namespace AlgoTests
 			denomn = new int[] { 2, 4 };
 			n = 7;
 			Console.WriteLine(MinNumberOfCoinsForChange(n, denomn));
-			Console.WriteLine("Expected: 1");
+			Console.WriteLine("Expected: -1");
 
 		}
 		/* 
