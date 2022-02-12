@@ -6,6 +6,48 @@ namespace AlgoTests
 {
     public class Dp
     {
+		#region NumberOfWaysToTraverseGraph
+		/*
+		 * Number of Ways to Traverse Graph
+		 * https://www.algoexpert.io/questions/Number%20Of%20Ways%20To%20Traverse%20Graph
+		 * 
+		 *    Consider a Square Graph with width x height nodes;
+		 *    Return all different possible ways to go from upper left corner to bottom right corner.
+		 *    Only moves allowed: right, down.
+		 *    
+		 *    The possible ways to reach the bottom right corner equals number of ways to reach its upper node plus n.w. to reach its left node
+		 *    
+		 *    f (x,y) = f ( x-1, y ) + f ( x, y-1)
+		 *    
+		 */
+		public static int NumberOfWaysToTraverseGraph(int width, int height)
+		{
+			int[,] m = new int[height + 1, width + 1];
+			for (int r = 1; r <= height; r++)
+				m[r, 1] = 1;
+			for (int c = 1; c <= width; c++)
+				m[1, c] = 1;
+
+			for (int r = 2; r <= height; r++)
+            {
+				for (int c = 2; c <= width; c++) 
+				{
+					m[r, c] = m[r, c - 1] + m[r - 1, c];
+				}
+			}
+
+			return m[height, width];
+
+		}
+		public static void TestNumberOfWaysToTraverseGraph()
+		{
+
+			int w = 4;
+			int h = 3;
+			Console.WriteLine(NumberOfWaysToTraverseGraph(w, h));
+			Console.WriteLine("Expected: 10");
+		}
+		#endregion
 		#region Levenshtein_Distance
 		/*
 		 * https://www.algoexpert.io/questions/Levenshtein%20Distance
@@ -60,8 +102,9 @@ namespace AlgoTests
 
 
 		}
-		#endregion
-		/*
+        #endregion
+        #region CoinChangeProblem
+        /*
 		 * Minimum coins to make a change
 		 * https://www.algoexpert.io/questions/Min%20Number%20Of%20Coins%20For%20Change
 		 *
@@ -72,7 +115,7 @@ namespace AlgoTests
 		 *  Output
          *         minimum number of coins to make that change
 		 */
-		public static int MinNumberOfCoinsForChange(int n, int[] denoms)
+        public static int MinNumberOfCoinsForChange(int n, int[] denoms)
 		{
 
 			// Memo array f, from 0 to n.
@@ -182,10 +225,12 @@ namespace AlgoTests
 			Console.WriteLine("Expected: 4");
 
 		}
-		/*
+        #endregion
+        #region MaxSubSetNoAdjacent
+        /*
 		 *  https://www.algoexpert.io/questions/Max%20Subset%20Sum%20No%20Adjacent
 		 */
-		public static int MaxSubsetSumNoAdjacent(int[] array)
+        public static int MaxSubsetSumNoAdjacent(int[] array)
 		{
 
 			if (array.Length == 0)
@@ -222,5 +267,6 @@ namespace AlgoTests
 			Console.WriteLine("Expected: 205");
 
 		}
-	}
+        #endregion
+    }
 }
