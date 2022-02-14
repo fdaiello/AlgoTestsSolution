@@ -1,12 +1,74 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace AlgoTests
 {
     public class Arrays
     {
+        #region SpiralTraverse
+        /*
+         * https://www.algoexpert.io/questions/Spiral%20Traverse
+         * 
+         */
+        public static List<int> SpiralTraverse(int[,] array)
+        {
+            List<int> r = new List<int>();
+
+            int lap = 0;
+            int dir = 0;
+            int col = 0;
+            int row = 0;
+
+            for ( int i =0; i < array.Length; i++)
+            {
+                r.Add(array[row, col]);
+                if (dir==0)
+                {
+                    if (col < array.GetLength(1) - 1 - lap )
+                        col++;
+                    else
+                        dir = 1;
+                }
+                if (dir == 1)
+                {
+                    if (row < array.GetLength(0) - 1 - lap)
+                        row++;
+                    else
+                        dir = 2;
+                }
+                if (dir == 2)
+                {
+                    if (col > 0 + lap)
+                        col--;
+                    else
+                        dir = 3;
+                }
+                if ( dir == 3)
+                {
+                    if (row > 0 + lap)
+                        row--;
+                    else
+                    {
+                        dir = 0;
+                        lap++;
+                        col++;
+                    }
+                }
+            }
+
+
+            return r;
+        }
+        public static void TestSpiralTraverse()
+        {
+            int[,] a = new int[,] { { 1, 2, 3, 4 }, { 12, 13, 14, 5 }, { 11, 16, 15, 6 }, { 10, 9, 8, 7 } };
+            Console.WriteLine(String.Join(",", SpiralTraverse(a)));
+            Console.WriteLine("Expected: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16");
+        }
+        #endregion
+
+        #region TwoNumberSum
         /*
 		 * Two Number Sum
 		 * Return an array with 2 numbers that belogns to the input array, and that sum equals target sum
@@ -34,6 +96,8 @@ namespace AlgoTests
             Console.WriteLine($"TwoNumberSum: [{String.Join(",", TwoNumberSum(array, sum))}]");
 
         }
+        #endregion
+        #region IsValidSubSequence
         /*
 		Is Valid Subsequence
 
@@ -71,7 +135,7 @@ namespace AlgoTests
 
             Console.WriteLine($"Is Valid Subsequence: {IsValidSubsequence(sequence, subSequence)}");
         }
-
+        #endregion
         /*
         Sorted Squared Array
          
