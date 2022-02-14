@@ -7,9 +7,10 @@ namespace AlgoTests
 {
     public class Program
     {
-        static void Main(string[] args)
-        {
-            Dp.TestNumberOfWaysToTraverseGraph();
+        static void Main(string[] args) 
+        { 
+       
+            Dp.TestMaxSumIncreasingSubsequence();
         }
     }
 }

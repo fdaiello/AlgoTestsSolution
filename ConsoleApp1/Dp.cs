@@ -6,6 +6,82 @@ namespace AlgoTests
 {
     public class Dp
     {
+		#region 
+
+		/*
+		 *   https://www.algoexpert.io/questions/Max%20Sum%20Increasing%20Subsequence
+		 */
+		public static List<List<int>> MaxSumIncreasingSubsequence(int[] array)
+		{
+
+			int?[] m = new int?[array.Length];
+			int?[] p = new int?[array.Length];
+
+			m[0] = array[0];
+			p[0] = null;
+			int? max = array[0];
+			int maxP = 0;
+
+			for ( int i=1; i<array.Length; i++)
+            {
+				m[i] = array[i];
+				for (int j = 0; j < i; j++)
+                {
+					if (array[i] > array[j])
+                    {
+						if (array[i] + m[j] > m[i])
+                        {
+							m[i] = array[i] + m[j];
+							p[i] = j;
+						}
+					}
+				}
+
+				if (m[i] > max)
+				{
+					max = m[i];
+					maxP = i;
+				}
+			}
+
+			List<int> list = new List<int>();
+			for ( int i = maxP; i>=0;)
+            {
+				list.Add(array[i]);
+				if (p[i] != null)
+					i = p[i] ?? -1;
+				else
+					i = -1;
+            }
+			list.Reverse();
+
+			return new List<List<int>> { new List<int> { max ?? -1 }, list };
+
+		}
+		public static void TestMaxSumIncreasingSubsequence()
+        {
+			int[] array = new int[] { 10, 70, 20, 30, 50, 11, 30 };
+			var result = MaxSumIncreasingSubsequence(array);
+			Console.WriteLine(result[0][0]);
+			Console.WriteLine(String.Join(",", result[1]));
+			Console.WriteLine("Expected: 110 -> 10,20,30,50");
+
+
+			array = new int[] { 550, 10, 5, 3, 11, 2, 1 };
+			result = MaxSumIncreasingSubsequence(array);
+			Console.WriteLine(result[0][0]);
+			Console.WriteLine(String.Join(",", result[1]));
+			Console.WriteLine("Expected: 550 -> 550");
+
+			array = new int[] { 8, 12, 2, 3, 15, 5, 7 };
+			result = MaxSumIncreasingSubsequence(array);
+			Console.WriteLine(result[0][0]);
+			Console.WriteLine(String.Join(",", result[1]));
+			Console.WriteLine("Expected: 35 -> 8, 12, 15");
+
+
+		}
+		#endregion
 		#region NumberOfWaysToTraverseGraph
 		/*
 		 * Number of Ways to Traverse Graph
