@@ -46,7 +46,7 @@ namespace AlgoTests
                 }
                 if ( dir == 3)
                 {
-                    if (row > 0 + lap)
+                    if (row > 0 + lap+1)
                         row--;
                     else
                     {
