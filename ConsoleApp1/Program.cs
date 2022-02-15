@@ -8,9 +8,9 @@ namespace AlgoTests
     public class Program
     {
         static void Main(string[] args) 
-        { 
-       
-            Dp.TestMinNumberOfJumps();
+        {
+
+            BTSolutions.TestBinaryTreeDiameter();
         }
     }
 }
