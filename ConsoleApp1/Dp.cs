@@ -1,12 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace AlgoTests
 {
     public class Dp
     {
-		#region 
+		#region LongestCommonSubSequence
+		/*
+		 * https://www.algoexpert.io/questions/Longest%20Common%20Subsequence
+		 * Given 2 strings, find the longest common subsequence
+		 * 
+		 */
+		public static List<char> LongestCommonSubsequence(string str1, string str2)
+		{
+			string[,] f = new string[str1.Length+1, str2.Length+1];
+			for (int r = 0; r <= str1.Length; r++)
+				for (int c = 0; c <= str2.Length; c++)
+					f[r, c] = string.Empty;
+
+			for ( int r =1; r<=str1.Length; r++)
+            {
+				for ( int c=1; c<=str2.Length; c++)
+                {
+					if ( str1[r-1] == str2[c-1])
+                    {
+						f[r, c] = f[r - 1, c - 1] + str1[r-1];
+                    }
+					else
+                    {
+						if ( f[r-1,c].Length > f[r, c - 1].Length)
+                        {
+							f[r, c] = f[r - 1, c];
+                        }
+						else
+                        {
+							f[r, c] = f[r, c - 1];
+                        }
+                    }
+                }
+            }
+
+			// Write your code here.
+			return f[str1.Length,str2.Length].ToCharArray().ToList();
+		}
+		public static void TestLongestCommonSubsequence()
+        {
+			string str1 = "ZXVVYZW";
+			string str2 = "XKYKZPW";
+			Console.WriteLine(String.Join(",",LongestCommonSubsequence(str1, str2)));
+			Console.WriteLine("Expected: X, Y, Z, W");
+
+			str1 = "ABCDEFG";
+			str2 = "APPLES";
+			Console.WriteLine(String.Join(",", LongestCommonSubsequence(str1, str2)));
+			Console.WriteLine("Expected: A, E");
+
+
+		}
+		#endregion
+		#region MaxSumIncreasingSubsequence
 
 		/*
 		 *   https://www.algoexpert.io/questions/Max%20Sum%20Increasing%20Subsequence
@@ -301,12 +354,15 @@ namespace AlgoTests
 			Console.WriteLine("Expected: 4");
 
 		}
-        #endregion
-        #region MaxSubSetNoAdjacent
-        /*
+		#endregion
+		#region MaxSubSetNoAdjacent
+		/*
 		 *  https://www.algoexpert.io/questions/Max%20Subset%20Sum%20No%20Adjacent
+		 *  
+		 *  f[i] = Max( f[i-1], f[i-2] + array[i] )
+		 *  
 		 */
-        public static int MaxSubsetSumNoAdjacent(int[] array)
+		public static int MaxSubsetSumNoAdjacent(int[] array)
 		{
 
 			if (array.Length == 0)
