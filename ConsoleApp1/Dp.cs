@@ -6,6 +6,76 @@ namespace AlgoTests
 {
     public class Dp
     {
+		#region MinNumberOfJumps
+		/*
+		 * https://www.algoexpert.io/questions/Min%20Number%20Of%20Jumps
+		 * 
+		 */
+
+		/*
+		 *   Optimal O(n) time complexity version
+		 *   
+		 *   MaxReach = 0 ->
+		 *   MaxReach = Max ( MaxReach, array[i] + i )
+		 *   
+		 *   Steps = array[0] ->
+		 *   Steps = Steps - 1
+		 *   
+		 *   If ( steps = 0 )
+		 *       jumps++
+		 *       steps = MaxReach - i
+		 *   
+		 */
+		public static int MinNumberOfJumps(int[] array)
+		{
+			if (array.Length == 1)
+				return 0;
+
+			int maxReach = array[0];
+			int steps = array[0];
+			int jumps = 1;
+
+			for ( int i=1; i<array.Length-1; i++)
+            {
+				maxReach = Math.Max(maxReach, i + array[i]);
+				steps--;
+				if (steps == 0)
+                {
+					jumps++;
+					steps = maxReach - i;
+                }
+            }
+
+			return jumps;
+		}
+		// O (n2) time complexity version
+		public static int MinNumberOfJumps0(int[] array)
+		{
+			int[] jumps = new int[array.Length];
+			for (int i = 1; i < array.Length; i++)
+				jumps[i] = int.MaxValue;
+
+			for (int i = 1; i < array.Length; i++)
+            {
+				for (int j=0; j<i; j++)
+                {
+					if ( j + array[j] >= i)
+                    {
+						jumps[i] = Math.Min(jumps[i], jumps[j] + 1);
+                    }
+                }
+			}
+
+			return jumps[jumps.Length - 1];
+
+		}
+		public static void TestMinNumberOfJumps()
+        {
+			int[] a = new int[] { 3, 4, 2, 1, 2, 3, 7, 1, 1, 1, 3 };
+			Console.WriteLine(MinNumberOfJumps(a));
+			Console.WriteLine("Expected: 4");
+        }
+		#endregion
 		#region LongestCommonSubSequence
 		/*
 		 * https://www.algoexpert.io/questions/Longest%20Common%20Subsequence
