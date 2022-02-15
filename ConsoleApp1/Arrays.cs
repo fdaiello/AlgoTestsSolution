@@ -6,6 +6,62 @@ namespace AlgoTests
 {
     public class Arrays
     {
+        #region ArrayOfProducts
+        /*
+         * https://www.algoexpert.io/questions/Array%20Of%20Products
+         * 
+         *       Array of products
+         */
+        // Otimal solution: O (n)
+        public static int[] ArrayOfProducts(int[] array)
+        {
+            int[] l = new int[array.Length];
+            int[] r = new int[array.Length];
+            int[] o = new int[array.Length];
+
+            int pl=1;
+            int pr = 1;
+            for (int i = 0; i < array.Length; i++)
+            {
+                l[i] = pl;
+                pl *= array[i];
+
+                r[array.Length - 1 - i] = pr;
+                pr *= array[array.Length - 1 - i];
+            }
+
+            for (int i = 0; i < array.Length; i++) 
+            {
+                o[i] = l[i] * r[i];
+            }
+            return o;
+        }
+        // Brut Force O ( n2 )
+        public static int[] ArrayOfProducts0(int[] array)
+        {
+            int[] r = new int[array.Length];
+            int p;
+
+            for ( int i=0; i < array.Length; i++)
+            {
+                p = 1;
+                for ( int j=0; j<array.Length; j++)
+                {
+                    if (j != i)
+                        p = p * array[j];
+                }
+                r[i] = p;
+            }
+
+            return r;
+        }
+        public static void TestArrayOfProduct()
+        {
+            int[] a = new int[] { 5, 1, 4, 2 };
+            Console.WriteLine(String.Join(",", ArrayOfProducts(a)));
+            Console.WriteLine("Expected: 8, 40, 10, 20");
+        }
+        #endregion
         #region SpiralTraverse
         /*
          * https://www.algoexpert.io/questions/Spiral%20Traverse
@@ -67,7 +123,6 @@ namespace AlgoTests
             Console.WriteLine("Expected: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16");
         }
         #endregion
-
         #region TwoNumberSum
         /*
 		 * Two Number Sum
@@ -136,6 +191,7 @@ namespace AlgoTests
             Console.WriteLine($"Is Valid Subsequence: {IsValidSubsequence(sequence, subSequence)}");
         }
         #endregion
+        #region SortedSquaredArray
         /*
         Sorted Squared Array
          
@@ -162,7 +218,8 @@ namespace AlgoTests
             int[] array = { -10, -2, -1, 2, 3, 5, 6, 8, 9 };
             Console.WriteLine($"Sorted Squared Array: [{string.Join(", ", SortedSquaredArray(array))}]");
         }
-
+        #endregion
+        #region ournament Winner
         // Tournament Winner
         /*
   There's an algorithms tournament taking place in which teams of programmers
@@ -236,6 +293,8 @@ namespace AlgoTests
             Console.WriteLine($"Tournament Winner: {TournamentWinner(competitions, results)}");
 
         }
+        #endregion
+        #region Non Constructible Change
         /*
         Non Constructible Change
 
@@ -289,8 +348,8 @@ namespace AlgoTests
 
             Console.WriteLine($"Minimum non constructible change: {NonConstructibleChange(coins)}");
         }
-
-
+        #endregion
+        #region LongestPeak
         /*
           Write a function that takes in an array of integers and returns the length of
           the longest peak in the array.
@@ -353,6 +412,7 @@ namespace AlgoTests
 
             return pMax;
         }
+        #endregion
         /*
          *  Return True if array is Monotonic ( sorted )
          */
