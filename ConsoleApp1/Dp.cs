@@ -74,7 +74,12 @@ namespace AlgoTests
 			int[] a = new int[] { 3, 4, 2, 1, 2, 3, 7, 1, 1, 1, 3 };
 			Console.WriteLine(MinNumberOfJumps(a));
 			Console.WriteLine("Expected: 4");
-        }
+
+			a = new int[] { 1, 1, 1 };
+			Console.WriteLine(MinNumberOfJumps(a));
+			Console.WriteLine("Expected: 2");
+
+		}
 		#endregion
 		#region LongestCommonSubSequence
 		/*
