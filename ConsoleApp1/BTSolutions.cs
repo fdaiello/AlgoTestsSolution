@@ -1,11 +1,67 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AlgoTests
 {
     public class BTSolutions
     {
+		#region FindSucessor
+
+		/*
+		 * https://www.algoexpert.io/questions/Find%20Successor
+		 */
+		public static BinaryTree FindSuccessor(BinaryTree tree, BinaryTree node)
+		{
+			int predecessor=int.MinValue;
+
+			return FindSuccessor(tree, node, ref predecessor);
+		}
+		public static BinaryTree FindSuccessor(BinaryTree tree, BinaryTree node, ref int predecessor)
+        {
+			if (tree.left != null)
+			{
+				BinaryTree t1 = FindSuccessor(tree.left, node, ref predecessor);
+				if (t1 != null)
+					return t1;
+			}
+
+			if (predecessor == node.value)
+				return tree;
+
+			predecessor = tree.value;
+
+			if (tree.right != null)
+			{
+				BinaryTree t2 = FindSuccessor(tree.right, node, ref predecessor);
+				if (t2 != null)
+					return t2;
+			}
+
+			// Write your code here.
+			return null;
+		}
+		public static void TestFindSucessor()
+        {
+			BinaryTree tree = new BinaryTree(1)
+			{
+				left = new BinaryTree(2) 
+				{
+					left = new BinaryTree(4) 
+					{
+						left = new BinaryTree(6)
+					},
+					right = new BinaryTree(5)
+				},
+				right = new BinaryTree(3)
+			};
+
+			BinaryTree node = new BinaryTree(5);
+
+			BinaryTree sucessor = FindSuccessor(tree, node);
+			Console.WriteLine(sucessor.value);
+			Console.WriteLine("Expected: 1");
+
+        }
+		#endregion
 		#region BinaryTreeDiameter
 		/*
 		 *	https://www.algoexpert.io/questions/Binary%20Tree%20Diameter
@@ -98,6 +154,7 @@ namespace AlgoTests
 			public int value;
 			public BinaryTree left;
 			public BinaryTree right;
+			public BinaryTree parent;
 
 			public BinaryTree(int value)
 			{
