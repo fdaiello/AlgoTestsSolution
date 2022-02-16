@@ -6,6 +6,33 @@ namespace AlgoTests
 {
     public class Arrays
     {
+        #region FirstDuplicateValue
+        /*
+         * https://www.algoexpert.io/questions/First%20Duplicate%20Value
+         */
+        public static int FirstDuplicateValue(int[] array)
+        {
+            HashSet<int> h = new HashSet<int>();
+
+            for ( int i=0; i < array.Length; i++)
+            {
+                if (h.Contains(array[i]))
+                    return array[i];
+                else
+                    h.Add(array[i]);
+            }
+
+            return -1;
+        }
+        public static void TestFirstDuplicatedValue() 
+        {
+            int[] a = new int[] { 2, 1, 3, 4, 5, 2, 7, 8, 9 };
+
+            Console.WriteLine(FirstDuplicateValue(a));
+            Console.WriteLine("Expected: 2");
+
+        }
+        #endregion
         #region MergeOverlappingInterval
         /*
          * https://www.algoexpert.io/questions/Merge%20Overlapping%20Intervals

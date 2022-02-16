@@ -6,6 +6,61 @@ namespace AlgoTests
 {
     public static class BstSolution
     {
+        /*
+         * https://www.algoexpert.io/questions/Reconstruct%20BST
+         * 
+         * Reconstruct BST
+         */
+        public static BST ReconstructBst(List<int> preOrderTraversalValues)
+        {
+            if (preOrderTraversalValues.Count == 0)
+                return null;
+
+            int p = 0;
+            BST root = ReconstructBst(preOrderTraversalValues, ref p, int.MaxValue, int.MinValue);
+
+            return root;
+        }
+        public static BST ReconstructBst(List<int> preOrderTraversalValues, ref int p, int leftFather, int rightFather )
+        {
+            if (p < preOrderTraversalValues.Count)
+            {
+                BST node;
+                node = new BST(preOrderTraversalValues[p]);
+                p++;
+
+                if (p < preOrderTraversalValues.Count)
+                {
+                    if ( preOrderTraversalValues[p] < node.value )
+                    {
+                        node.left = ReconstructBst(preOrderTraversalValues, ref p, node.value, rightFather);
+                    }
+
+                    if (p < preOrderTraversalValues.Count && preOrderTraversalValues[p] >= node.value && preOrderTraversalValues[p] < leftFather )
+                    {
+                        node.right = ReconstructBst(preOrderTraversalValues, ref p, leftFather, node.value);
+                    }
+
+                }
+
+                return node;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public static void TestReconstructBst()
+        {
+            List<int> list = new List<int>() { 10, 4, 2, 1, 5, 17, 19, 18 };
+            BST bst = ReconstructBst(list);
+
+            List<int> nList = new List<int>();
+            nList = PreOrderTraverse(bst, nList);
+            Console.WriteLine(String.Join(",", nList));
+            Console.WriteLine("Expected: " + String.Join(",", list));
+        }
+
         public static void TestFindClosestValueInBst()
         {
             BST tree = new BST(10)
