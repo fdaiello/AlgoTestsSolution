@@ -4,6 +4,89 @@ namespace AlgoTests
 {
     public class BTSolutions
     {
+		#region HeightBalancedTree
+		/*
+		 * https://www.algoexpert.io/questions/Height%20Balanced%20Binary%20Tree
+		 */
+		public static bool HeightBalancedBinaryTree(BinaryTree tree)
+		{
+			if (tree.left != null && !HeightBalancedBinaryTree(tree.left))
+				return false;
+
+			if (tree.right != null && !HeightBalancedBinaryTree(tree.right))
+				return false;
+
+			int leftDeep = BtDepth(tree.left);
+			int rightDeep = BtDepth(tree.right);
+
+			return Math.Abs(leftDeep - rightDeep) <= 1;
+
+		}
+		public static int BtDepth(BinaryTree tree)
+        {
+			if (tree == null)
+				return 0;
+
+			int leftDeep = BtDepth(tree.left);
+
+			int rightDeep = BtDepth(tree.right);
+
+			return Math.Max(leftDeep, rightDeep)+1;
+        }
+		public static void TestHeightBalancedBinaryTree()
+        {
+			BinaryTree tree = new BinaryTree(1)
+			{
+				left = new BinaryTree(2)
+				{
+					left = new BinaryTree(4)
+					{
+						left = new BinaryTree(6)
+					},
+					right = new BinaryTree(5)
+				},
+				right = new BinaryTree(3)
+			};
+
+			Console.WriteLine(HeightBalancedBinaryTree(tree));
+			Console.WriteLine("Expected: false");
+
+
+			tree = new BinaryTree(1)
+			{
+				left = new BinaryTree(2)
+				{
+					left = new BinaryTree(4)
+					{
+						left = new BinaryTree(6),
+						right = new BinaryTree(6)
+					},
+					right = new BinaryTree(5)
+					{
+						left = new BinaryTree(6),
+						right = new BinaryTree(6)
+					}
+				},
+				right = new BinaryTree(3)
+				{
+					left = new BinaryTree(4)
+					{
+						left = new BinaryTree(6),
+						right = new BinaryTree(6)
+					},
+					right = new BinaryTree(5)
+					{
+						left = new BinaryTree(6),
+						right = new BinaryTree(6)
+					}
+				}
+			};
+
+			Console.WriteLine(HeightBalancedBinaryTree(tree));
+			Console.WriteLine("Expected: true");
+
+		}
+		#endregion
 		#region FindSucessor
 
 		/*
