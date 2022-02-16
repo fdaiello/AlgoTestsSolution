@@ -6,6 +6,50 @@ namespace AlgoTests
 {
     public class Arrays
     {
+        #region MergeOverlappingInterval
+        /*
+         * https://www.algoexpert.io/questions/Merge%20Overlapping%20Intervals
+         */
+        public static int[][] MergeOverlappingIntervals(int[][] intervals)
+        {
+            //Array.Sort(intervals, new Comparison<int[]>((x,y) => x[0] > y[0] ? 1 : x[0]<y[0] ? -1 : 0));
+
+            Array.Sort(intervals, (x, y) => x[0].CompareTo(y[0]));
+
+            int ps = intervals[0][0];
+            int pe = intervals[0][1];
+            List<int[]> iList = new List<int[]>();
+
+
+            for ( int i=1; i<intervals.Length; i++)
+            {
+                if ( intervals[i][0] <= pe )
+                {
+                    if (  intervals[i][1] > pe )
+                        pe = intervals[i][1];
+                }
+                else
+                {
+                    iList.Add(new int[] { ps, pe });
+                    ps = intervals[i][0];
+                    pe = intervals[i][1];
+                }
+            }
+
+            iList.Add(new int[] { ps, pe });
+
+            // Write your code here.
+            return iList.ToArray();
+        }
+        public static void TestMergeOverlappingIntervals()
+        {
+            int[][] intervals = new int[][] { new int[] { 1, 2 }, new int[] { 3, 5 }, new int[] { 4, 7 }, new int[] { 6, 8 }, new int[] { 9, 10 } };
+
+            Console.WriteLine("[" + String.Join(",",MergeOverlappingIntervals(intervals).ToList().Select(p=>"["+p[0].ToString()+","+p[1].ToString()+"]")) + "]");
+            Console.WriteLine("Expected: [1,2], [3,8], [9,10]");
+
+        }
+        #endregion
         #region ArrayOfProducts
         /*
          * https://www.algoexpert.io/questions/Array%20Of%20Products
