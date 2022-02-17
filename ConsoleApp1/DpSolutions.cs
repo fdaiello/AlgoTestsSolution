@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace AlgoTests
 {
-    public class Dp
+    public class DpSolutions
     {
 		#region MinNumberOfJumps
 		/*

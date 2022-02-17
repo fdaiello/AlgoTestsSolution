@@ -4,8 +4,70 @@ using System.Linq;
 
 namespace AlgoTests
 {
-    public class Arrays
+    public class ArraySolutions
     {
+        #region SubArraySort
+        /*
+         * https://www.algoexpert.io/questions/Subarray%20Sort
+         */
+        public static int[] SubarraySort(int[] array)
+        {
+            int minUnsorted = int.MaxValue;
+            int pminUnsorted=-1;
+
+            int maxUnsorted = int.MinValue;
+            int pmaxUnsorted=-1;
+
+            // Find min and max out of position numbers
+            for (int i=0; i<array.Length; i++)
+            {
+                if ( (i> 0 && array[i] < array[i - 1]) || ( i<array.Length-1 && array[i] > array[i+1]))
+                {
+                    if (array[i] < minUnsorted) 
+                    {
+                        minUnsorted = array[i];
+                    }
+                    if (array[i] > maxUnsorted) 
+                    {
+                        maxUnsorted = array[i];
+                    }
+                }
+            }
+
+            // Find correct position for min Unsorted
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (minUnsorted < array[i]) 
+                {
+                    pminUnsorted = i;
+                    break;
+                }
+            }
+
+            // Find correct position for max Unsorted
+            for ( int i =array.Length-1; i>=0; i--)
+            {
+                if (maxUnsorted > array[i])
+                {
+                    pmaxUnsorted = i;
+                    break;
+                }
+            }
+
+            return new int[] { pminUnsorted, pmaxUnsorted};
+        }
+        public static void TestSubarraySort() 
+        {
+            int[] a = new int[] { 1, 2, 4, 7, 10, 11, 7, 12, 6, 7, 16, 18, 19 };
+            Console.WriteLine(String.Join(",", SubarraySort(a)));
+            Console.WriteLine("Expected: 3, 9");
+
+            a = new int[] { 1, 2, 4, 7, 10, 11, 7, 12, 7, 7, 16, 18, 19 };
+            Console.WriteLine(String.Join(",", SubarraySort(a)));
+            Console.WriteLine("Expected: 4, 9");
+
+        }
+        #endregion
         #region FirstDuplicateValue
         /*
          * https://www.algoexpert.io/questions/First%20Duplicate%20Value
@@ -484,6 +546,7 @@ namespace AlgoTests
             return pMax;
         }
         #endregion
+        #region Other
         /*
          *  Return True if array is Monotonic ( sorted )
          */
@@ -602,5 +665,6 @@ namespace AlgoTests
             // Write your code here.
             return array;
         }
+        #endregion
     }
 }
