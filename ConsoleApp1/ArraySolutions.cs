@@ -6,6 +6,79 @@ namespace AlgoTests
 {
     public class ArraySolutions
     {
+        #region FourNumbersum
+        /*
+         * https://www.algoexpert.io/questions/Four%20Number%20Sum
+         */
+        public static List<int[]> FourNumberSum(int[] array, int targetSum)
+        {
+            // Output list
+            List<int[]> result = new List<int[]>();
+
+            // Create map with all possible pairs
+            Dictionary<int, List<int[]>> map = new Dictionary<int, List<int[]>>();
+
+            for ( int i =0; i<array.Length-1; i++)
+            {
+                for ( int j=i+1; j<array.Length; j++)
+                {
+                    if (map.ContainsKey(array[i] + array[j]))
+                    {
+                        map[array[i] + array[j]].Add(new int[] { array[i], array[j] });
+                    }
+                    else
+                    {
+                        map.Add(array[i] + array[j], new List<int[]>() { new int[] { array[i], array[j] } });
+                    }
+                }
+            }
+
+
+            // Check all pairs, and look for a match
+            int sum1;
+            int sum2;
+
+            foreach ( KeyValuePair<int,List<int[]>> kv in map)
+            {
+                sum1 = kv.Key;
+                sum2 = targetSum - sum1;
+                int[] quadruple;
+
+                // Look for target pair. 
+                if (map.ContainsKey(sum2))
+                {
+                    foreach ( int[] pair1 in kv.Value)
+                    {
+                        foreach ( int [] pair2 in map[sum2])
+                        {
+                            if ( pair1[0]!=pair2[0] && pair1[0] != pair2[1] && pair1[1]!=pair2[0] && pair1[1] != pair2[1])
+                            {
+                                quadruple = new int[] { pair1[0], pair1[1], pair2[0], pair2[1] };
+                                Array.Sort(quadruple);
+                                if (!result.Exists(p => p[0] == quadruple[0] && p[1] == quadruple[1] && p[2] == quadruple[2] && p[3] == quadruple[3]))
+                                {
+                                    result.Add(quadruple);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static void TestFourNumberSum()
+        {
+            int[] a = new int[] { 7, 6, 4, -1, 1, 2 };
+            int target = 16;
+            List<int[]> res = FourNumberSum(a, target);
+            var tuples = res.Select(p => "[" + string.Join(",", p) + "]").ToList();
+            Console.WriteLine("[" + String.Join(",", tuples) + "]");
+            Console.WriteLine("Expected: [[7, 6, 4, -1], [7, 6, 1, 2]]");
+
+        }
+        #endregion
         #region SubArraySort
         /*
          * https://www.algoexpert.io/questions/Subarray%20Sort
