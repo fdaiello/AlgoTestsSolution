@@ -7,6 +7,114 @@ namespace AlgoTests
 {
     class GraphSolutions
     {
+        #region CycleInGraph
+        /*
+         * https://www.algoexpert.io/questions/Cycle%20In%20Graph
+         */
+        public static bool CycleInGraph(int[][] edges)
+        {
+            int numberOfNodes = edges.Length;
+
+            bool[] visited = new bool[numberOfNodes];
+            bool[] inStack = new bool[numberOfNodes];
+
+            for ( int node =0; node<numberOfNodes; node++ )
+            {
+                if (visited[node])
+                    continue;
+
+                if (HasCycle(node, edges, visited, inStack))
+                    return true;
+
+            }
+
+            return false;
+        }
+        public static bool HasCycle(int node, int[][] edges, bool[] visited, bool[] inStack)
+        {
+            visited[node] = true;
+            inStack[node] = true;
+
+            foreach ( int adjacent in edges[node])
+            {
+                if (!visited[adjacent])
+                {
+                    if (HasCycle(adjacent, edges, visited, inStack))
+                        return true;
+                }
+                else if (inStack[adjacent])
+                {
+                    return true;
+                }
+            }
+
+            inStack[node] = false;
+            return false;
+        }
+
+        /*
+         * The following code would only work if the graph was undirecional
+         */
+        public static bool CycleInGraph_2(int[][] edges)
+        {
+            HashSet<int> visited = new HashSet<int>();
+
+            int i = 0;
+            foreach( int[] vertice in edges)
+            {
+                if (!visited.Contains(i))
+                {
+                    //Traverse graph starting at this vertice
+                    Queue<int> queue = new Queue<int>();
+                    queue.Enqueue(i);
+
+                    while (queue.Count > 0) 
+                    {
+                        int visiting = queue.Dequeue();
+                        if (visited.Contains(visiting))
+                            return true;
+
+                        visited.Add(visiting);
+
+                        foreach ( int adjacent in edges[visiting]) 
+                        {
+                            queue.Enqueue(adjacent);
+                        }
+                    }
+                }
+                i++;
+            }
+
+            return false;
+        }
+        public static void TestCycleInGraph()
+        {
+            // Graph represented as an Adjacent List
+            int[][] edges = new int[][]
+            {
+                new int[] { 1, 3},
+                new int[] { 2, 3, 4},
+                new int[] { 0},
+                new int[] { },
+                new int[] { 2, 5},
+                new int[] { },
+            };
+
+            Console.WriteLine(CycleInGraph(edges));
+            Console.WriteLine("Expected: true");
+
+            edges = new int[][]
+            {
+                new int[] { 1, 2 },
+                new int[] { 2 },
+                new int[] { }
+            };
+
+            Console.WriteLine(CycleInGraph(edges));
+            Console.WriteLine("Expected: false");
+
+        }
+        #endregion
         #region RemoveIsland
         /*
          * https://www.algoexpert.io/questions/Remove%20Islands
