@@ -1,11 +1,121 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace AlgoTests
 {
     class GraphSolutions
     {
+        #region RemoveIsland
+        /*
+         * https://www.algoexpert.io/questions/Remove%20Islands
+         */
+        public static int[][] RemoveIslands(int[][] matrix)
+        {
+            // visited map
+            bool[,] visited = new bool[matrix.Length, matrix[0].Length];
+
+            // valid island head positions
+            List<int[]> validIslandHeads = new List<int[]>();
+
+            // dictionary with islands heads and nodes list
+            Dictionary<int[], List<int[]>> islands = new Dictionary<int[], List<int[]>>();
+
+            // traverse matrix - except borders - lets look for possible islands
+            for ( int i = 1; i<matrix.Length-1; i++) 
+            {
+                for ( int j =1; j<matrix[0].Length-1; j++)
+                {
+                    // Check for not visited nodes, with 1
+                    if ( matrix[i][j] == 1 && !visited[i,j])
+                    {
+                        // Flat indicating its a valid island
+                        bool islandIsValid = true;
+
+                        // Insert in all islands map
+                        int[] head = new int[] { i, j };
+                        islands.Add(head, new List<int[]>());
+
+                        // From node i, j - lets look for all neighbors iqual 1, using Graph Deep First Search
+                        Stack<int[]> stack = new Stack<int[]>();
+                        stack.Push(new int[] { i, j });
+
+                        while (stack.Count > 0)
+                        {
+                            // Pop next node and mark as visited
+                            int[] node = stack.Pop();
+                            visited[node[0], node[1]] = true;
+
+                            // Insert node into all islands list
+                            islands[head].Add(new int[] { node[0], node[1] });
+
+                            // Check if this node touches border and invalidate this island
+                            if (node[0] == 0 || node[0] == matrix.Length - 1 || node[1] == 0 || node[1] == matrix[0].Length - 1)
+                                islandIsValid = false;
+
+                            // Check all not visited neighbors, with one, and push to visit them
+                            // UP
+                            if (node[0] > 0 && !visited[node[0] - 1, node[1]] & matrix[node[0]-1][node[1]]==1)
+                                stack.Push(new int[] { node[0] - 1, node[1] });
+                            // Right
+                            if (node[1] < matrix[0].Length-1 && !visited[node[0], node[1]+1] & matrix[node[0]][node[1]+1] == 1)
+                                stack.Push(new int[] { node[0], node[1] + 1});
+                            // Down
+                            if (node[0] < matrix.Length - 1 && !visited[node[0]+1, node[1]] & matrix[node[0] + 1][node[1]] == 1)
+                                stack.Push(new int[] { node[0] + 1, node[1] });
+                            // Left
+                            if (node[1] > 0 && !visited[node[0], node[1]-1] & matrix[node[0]][node[1]-1] == 1)
+                                stack.Push(new int[] { node[0], node[1] - 1 });
+                        }
+
+                        // After visited all island, if its valid, save its head
+                        if (islandIsValid)
+                            validIslandHeads.Add(head);
+                    }
+                }
+            }
+
+            // Now lets erase all valid islands
+            foreach ( int[] head in validIslandHeads)
+            {
+                foreach ( int[] node in islands[head])
+                {
+                    matrix[node[0]][node[1]] = 0;
+                }
+            }
+
+            return matrix;
+        }
+        public static void TestRemoveIslands()
+        {
+            int[][] input = new int[][]
+            { 
+                new int[] { 1, 0, 0, 0, 0, 0 },
+                new int[] { 0, 1, 0, 1, 1, 1 },
+                new int[] { 0, 0, 1, 0, 1, 0 },
+                new int[] { 1, 1, 0, 0, 1, 0 },
+                new int[] { 1, 0, 1, 1, 0, 0 },
+                new int[] { 1, 0, 0, 0, 0, 1 }
+            };
+            int[][] expectedOutput = new int[][]
+            {
+                new int[]{ 1, 0, 0, 0, 0, 0 },
+                new int[]{ 0, 0, 0, 1, 1, 1 },
+                new int[]{ 0, 0, 0, 0, 1, 0 },
+                new int[]{ 1, 1, 0, 0, 1, 0 },
+                new int[]{ 1, 0, 0, 0, 0, 0 },
+                new int[]{ 1, 0, 0, 0, 0, 1 }
+            };
+
+            int[][] output = RemoveIslands(input);
+
+            Console.WriteLine(String.Join("\n", output.ToList().Select(p => String.Join(",", p.ToList()))));
+            Console.WriteLine("Expected:");
+            Console.WriteLine(String.Join("\n",expectedOutput.ToList().Select(p=>String.Join(",",p.ToList()))));
+
+        }
+        #endregion
         #region YoungestCommonAncestor
         /*
          * https://www.algoexpert.io/questions/Youngest%20Common%20Ancestor
