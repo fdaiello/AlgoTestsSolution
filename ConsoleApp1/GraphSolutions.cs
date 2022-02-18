@@ -6,6 +6,80 @@ namespace AlgoTests
 {
     class GraphSolutions
     {
+        #region YoungestCommonAncestor
+        /*
+         * https://www.algoexpert.io/questions/Youngest%20Common%20Ancestor
+         */
+        public static AncestralTree GetYoungestCommonAncestor(AncestralTree topAncestor, AncestralTree descendantOne, AncestralTree descendantTwo )
+        {
+            HashSet<AncestralTree> visited = new HashSet<AncestralTree>();
+
+            // Map descendantOne ancestors
+            AncestralTree node = descendantOne;
+            while ( node != null)
+            {
+                visited.Add(node);
+                node = node.ancestor;
+            }
+
+            // Check descendantTwo ancestors
+            node = descendantTwo;
+            while ( node != null)
+            {
+                if (visited.Contains(node))
+                {
+                    return node;
+                }
+                node = node.ancestor;
+            }
+
+            // Write your code here.
+            return topAncestor;
+        }
+
+        public class AncestralTree
+        {
+            public char name;
+            public AncestralTree ancestor;
+
+            public AncestralTree(char name)
+            {
+                this.name = name;
+                this.ancestor = null;
+            }
+
+            // This method is for testing only.
+            public void AddAsAncestor(AncestralTree[] descendants)
+            {
+                foreach (AncestralTree descendant in descendants)
+                {
+                    descendant.ancestor = this;
+                }
+            }
+        }
+        public static void TestYoungestAncestor()
+        {
+            AncestralTree E = new AncestralTree('E');
+            AncestralTree B = new AncestralTree('B');
+            AncestralTree A = new AncestralTree('A');
+            AncestralTree D = new AncestralTree('D');
+            AncestralTree I = new AncestralTree('I');
+
+            I.ancestor = D;
+            D.ancestor = B;
+            B.ancestor = A;
+            E.ancestor = B;
+
+            Console.WriteLine(GetYoungestCommonAncestor(A, E, I).name);
+            Console.WriteLine("Expected: B");
+
+            Console.WriteLine(GetYoungestCommonAncestor(A, A, B).name);
+            Console.WriteLine("Expected: A");
+
+            Console.WriteLine(GetYoungestCommonAncestor(A, E, B).name);
+            Console.WriteLine("Expected: B");
+        }
+        #endregion
         #region RiverSides
         /*
          * https://www.algoexpert.io/questions/River%20Sizes
