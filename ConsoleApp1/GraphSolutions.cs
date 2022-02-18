@@ -6,6 +6,85 @@ namespace AlgoTests
 {
     class GraphSolutions
     {
+        #region RiverSides
+        /*
+         * https://www.algoexpert.io/questions/River%20Sizes
+         */
+        public static List<int> RiverSizes(int[,] matrix)
+        {
+
+            // Rivers lengh list
+            List<int> rivers = new List<int>();
+
+            // Save visited nodes
+            HashSet<Tuple<int, int>> visited = new HashSet<Tuple<int, int>>();
+
+            // Traverse Matrix
+            for ( int i=0; i< matrix.GetLength(0); i++)
+            {
+                for (int j=0; j< matrix.GetLength(1); j++)
+                {
+                    if (matrix[i, j] == 1)
+                    {
+                        // Check if node was already visited
+                        if ( !visited.Contains(new Tuple<int, int>(i, j)))
+                        {
+                            // Add node to map
+                            visited.Add(new Tuple<int, int>(i, j));
+
+                            // Traverse the river
+                            Queue<Tuple<int, int>> q = new Queue<Tuple<int, int>>();
+                            q.Enqueue(new Tuple<int, int>(i, j));
+                            int rl = 0;
+
+                            while (q.Count > 0)
+                            {
+                                rl++;
+                                Tuple<int, int> node = q.Dequeue();
+                                
+                                // Check all neighbors - not already visited
+                                // Top
+                                if ( node.Item1 > 0 && matrix[node.Item1 - 1,node.Item2]==1 && !visited.Contains(new Tuple<int, int>(node.Item1 - 1, node.Item2)))
+                                {
+                                    visited.Add(new Tuple<int, int>(node.Item1 - 1, node.Item2));
+                                    q.Enqueue(new Tuple<int, int>(node.Item1 - 1, node.Item2));
+                                }
+                                // Right
+                                if (node.Item2 < matrix.GetLength(1)-1 && matrix[node.Item1, node.Item2 + 1] == 1 && !visited.Contains(new Tuple<int, int>(node.Item1, node.Item2 + 1)))
+                                {
+                                    visited.Add(new Tuple<int, int>(node.Item1, node.Item2 + 1));
+                                    q.Enqueue(new Tuple<int, int>(node.Item1, node.Item2 + 1));
+                                }
+                                // Down
+                                if (node.Item1 < matrix.GetLength(0) - 1 && matrix[node.Item1 + 1, node.Item2] == 1 && !visited.Contains(new Tuple<int, int>(node.Item1 + 1, node.Item2)))
+                                {
+                                    visited.Add((new Tuple<int, int>(node.Item1 + 1, node.Item2)));
+                                    q.Enqueue(new Tuple<int, int>(node.Item1 + 1, node.Item2));
+                                }
+                                // Left
+                                if (node.Item2 > 0 && matrix[node.Item1, node.Item2 - 1] == 1 && !visited.Contains(new Tuple<int, int>(node.Item1, node.Item2 - 1)))
+                                {
+                                    visited.Add((new Tuple<int, int>(node.Item1, node.Item2 - 1)));
+                                    q.Enqueue(new Tuple<int, int>(node.Item1, node.Item2 - 1));
+                                }
+                            }
+
+                            rivers.Add(rl);
+                        }
+                    }
+                }
+            }
+
+            
+            return rivers;
+        }
+        public static void TestRiverSizes()
+        {
+            int[,] m = new int[,] { { 1, 0, 0, 1, 0 }, { 1, 0, 1, 0, 0 }, { 0, 0, 1, 0, 1 }, { 1, 0, 1, 0, 1 }, { 1, 0, 1, 1, 0 } };
+            Console.WriteLine(String.Join(",",RiverSizes(m)));
+            Console.WriteLine("Expected: 1,2,2,2,5");
+        }
+        #endregion
         #region BreadthFirstSearch
         /*
          * https://www.algoexpert.io/questions/Breadth-first%20Search
