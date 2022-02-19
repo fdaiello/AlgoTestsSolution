@@ -6,6 +6,57 @@ namespace AlgoTests
 {
     class RecursionSolutions
     {
+        #region powerset
+        /*
+         * https://www.algoexpert.io/questions/Powerset
+         */
+        public static List<List<int>> Powerset(List<int> array)
+        {
+            if ( array.Count == 0)
+            {
+                return new List<List<int>>() { new List<int>() };
+            }
+            else if ( array.Count == 1)
+            {
+                return new List<List<int>>() { new List<int>(), array };
+            }
+            else
+            {
+                List<List<int>> ret = new List<List<int>>();
+
+                int e = array[array.Count-1];
+                List<int> arrayLess = new List<int>(array);
+                arrayLess.RemoveAt(array.Count-1);
+
+                List<List<int>> powersetLess = Powerset(arrayLess);
+
+                foreach (List<int> subarray in powersetLess)
+                {
+                    ret.Add(new List<int>(subarray));
+
+                    subarray.Add(e);
+                    ret.Add(new List<int>(subarray));
+                }
+
+                return ret;
+            }
+        }
+        public static void TestPowerset()
+        {
+            List<int> a = new List<int>() { };
+            Console.WriteLine("[" + String.Join("],[", Powerset(a).Select(p => "{" + String.Join("},{", p) + "}")) + "]");
+
+            a = new List<int>() { 1 };
+            Console.WriteLine("[" + String.Join("],[", Powerset(a).Select(p => "{" + String.Join("},{", p) + "}")) + "]");
+
+            a = new List<int>() { 1, 2 };
+            Console.WriteLine("[" + String.Join("],[", Powerset(a).Select(p => "{" + String.Join("},{", p) + "}")) + "]");
+
+            a = new List<int>() { 1, 2, 3 };
+            Console.WriteLine("[" + String.Join("],[", Powerset(a).Select(p => "{" + String.Join("},{", p) + "}")) + "]");
+        }
+        #endregion
+        #region Permutations
         /*
          * https://www.algoexpert.io/questions/Permutations
          */
@@ -50,5 +101,7 @@ namespace AlgoTests
             a = new List<int>() {  };
             Console.Write(String.Join(" - ", GetPermutations(a).Select(p => String.Join(",", p))));
         }
+        #endregion
     }
+
 }
