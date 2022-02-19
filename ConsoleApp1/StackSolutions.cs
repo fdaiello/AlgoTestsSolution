@@ -7,6 +7,44 @@ namespace AlgoTests
 {
     public class StackSolutions
     {
+		#region NextGreaterElements
+		/*
+		 * https://www.algoexpert.io/questions
+		 */
+		public static int[] NextGreaterElement(int[] array)
+		{
+			int i = 0;
+			int c = 0;
+			int[] ret = Enumerable.Repeat(-1, array.Length).ToArray();
+
+			Stack<int> stack = new Stack<int>();
+			while (c < array.Length*2 -1)
+            {
+				while ( stack.Count> 0 && array[stack.Peek()] < array[i])
+                {
+					ret[stack.Pop()] = array[i];
+                }
+				stack.Push(i);
+				c++;
+
+				i++;
+				if (i == array.Length)
+					i = 0;
+            }
+
+			return ret;
+		}
+		public static void TestNextGreaterElement()
+        {
+			int[] a = new int[] { 2, 5, -3, -4, 6, 7, 2 };
+			Console.WriteLine(String.Join(",", NextGreaterElement(a)));
+			Console.WriteLine("Expected: 5, 6, 6, 6, 7, -1, 5");
+
+			a = new int[] { 7, 6, 5, 4, 3, 2, 1 };
+			Console.WriteLine(String.Join(",", NextGreaterElement(a)));
+
+		}
+		#endregion
 		#region SortStack
 		/*
 		 * https://www.algoexpert.io/questions/Sort%20Stack
