@@ -7,6 +7,73 @@ namespace AlgoTests
 {
     public class StackSolutions
     {
+		#region SortStack
+		/*
+		 * https://www.algoexpert.io/questions/Sort%20Stack
+		 */
+		public static List<int> SortStack(List<int> stack)
+		{
+			if ( stack.Count < 2)
+            {
+				return stack;
+            }
+			else
+            {
+				int p1 = stack[stack.Count - 1];
+				stack.RemoveAt(stack.Count - 1);
+
+				if ( stack.Count > 1)
+                {
+					stack = SortStack(stack);
+                }
+				int p2 = stack[stack.Count - 1];
+				if ( p2 > p1)
+                {
+					stack.RemoveAt(stack.Count - 1);
+					stack.Add(p1);
+					stack = SortStack(stack);
+					stack.Add(p2);
+                }
+				else
+                {
+					stack.Add(p1);
+                }
+            }
+			
+			return stack;
+		}
+		public static void TestSortStack()
+        {
+			List<int> stack = new List<int>() {  };
+			Console.WriteLine(String.Join(",", SortStack(stack)));
+			Console.WriteLine("Expected: ");
+
+			stack = new List<int>() { 1 };
+			Console.WriteLine(String.Join(",", SortStack(stack)));
+			Console.WriteLine("Expected: 1");
+
+			stack = new List<int>() { 2, 1 };
+			Console.WriteLine(String.Join(",", SortStack(stack)));
+			Console.WriteLine("Expected: 1, 2");
+
+			stack = new List<int>() { 3, 2, 1 };
+			Console.WriteLine(String.Join(",", SortStack(stack)));
+			Console.WriteLine("Expected: 1, 2, 3");
+
+			stack = new List<int>() { -5, 2, -2, 4, 3, 1 };
+			Console.WriteLine(String.Join(",",SortStack(stack)));
+			Console.WriteLine("Expected: -5, -2, 1, 2, 3, 4");
+
+			stack = new List<int>() { 5, 4, 3, 2, 1, 0 };
+			Console.WriteLine(String.Join(",", SortStack(stack)));
+			Console.WriteLine("Expected: 0, 1, 2, 3, 4, 5");
+
+			stack = new List<int>() { -5, -4, -3, -2, 5, 4, 3, 2, 1  };
+			Console.WriteLine(String.Join(",", SortStack(stack)));
+			Console.WriteLine("Expected: -5, -4, -3, -2, 1, 2, 3, 4, 5");
+
+		}
+		#endregion
 		#region SunsetViews
 		/*
 		 * https://www.algoexpert.io/questions/Sunset%20Views
@@ -54,7 +121,6 @@ namespace AlgoTests
 
         }
 		#endregion
-
 		#region BalancedBrackets
 		/*
 		 * https://www.algoexpert.io/questions/Balanced%20Brackets
