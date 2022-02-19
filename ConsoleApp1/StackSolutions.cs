@@ -7,6 +7,66 @@ namespace AlgoTests
 {
     public class StackSolutions
     {
+
+        #region BalancedBrackets
+        /*
+		 * https://www.algoexpert.io/questions/Balanced%20Brackets
+		 */
+        public static bool BalancedBrackets(string str)
+		{
+			Stack<char> stack = new Stack<char>();
+			char current;
+
+			for ( int i =0; i<str.Length; i++)
+            {
+				current = str[i];
+				if (current == '[' || current == '{' || current == '(')
+                {
+					stack.Push(current);
+                }
+				else if (current == ']' || current == '}' || current == ')')
+                {
+					if ( stack.Count == 0)
+                    {
+						return false;
+                    }
+					else
+                    {
+						char last = stack.Pop();
+						if ( (current==']' && last!='[') || (current == '}' && last != '{') || (current == ')' && last != '('))
+                        {
+							return false;
+                        }
+                    }
+                }
+            }
+
+			if (stack.Count == 0)
+				return true;
+			else
+				return false;
+
+		}
+		public static void TestBalancedBrackets()
+        {
+			string s = "[[[{{{((()))}}}]]]";
+			Console.WriteLine(BalancedBrackets(s));
+			Console.WriteLine("Expected: True");
+
+			s = "[[[{{{((())}})}]]]";
+			Console.WriteLine(BalancedBrackets(s));
+			Console.WriteLine("Expected: False");
+
+			s = "[[[5{{4{(3(2(1)))}}}]]";
+			Console.WriteLine(BalancedBrackets(s));
+			Console.WriteLine("Expected: False");
+
+			s = "[[[5{{4(3(2(1)))}}}]";
+			Console.WriteLine(BalancedBrackets(s));
+			Console.WriteLine("Expected: False");
+		}
+		#endregion BalancedBrackets
+
 		public static void TestStack()
         {
 			MinMaxStack stack = new MinMaxStack();
@@ -25,8 +85,6 @@ namespace AlgoTests
 	public class MinMaxStack
 	{
 		private List<int> stack = new List<int>();
-		private int min = int.MaxValue;
-		private int max = int.MinValue;
 
 		public int Peek()
 		{
