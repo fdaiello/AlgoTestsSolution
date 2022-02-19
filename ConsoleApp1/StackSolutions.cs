@@ -7,12 +7,59 @@ namespace AlgoTests
 {
     public class StackSolutions
     {
+		#region SunsetViews
+		/*
+		 * https://www.algoexpert.io/questions/Sunset%20Views
+		 */
+		public static List<int> SunsetViews(int[] buildings, string direction)
+		{
+			List<int> ret = new List<int>();
 
-        #region BalancedBrackets
-        /*
+			int maxHeight = int.MinValue;
+
+			if (direction == "EAST")
+            {
+				for ( int i = buildings.Length-1; i>=0; i--)
+                {
+					if (buildings[i] > maxHeight)
+                    {
+						ret.Add(i);
+						maxHeight = buildings[i];
+					}
+                }
+            }
+			else
+            {
+				for (int i = 0; i <buildings.Length; i++)
+				{
+					if (buildings[i] > maxHeight)
+					{
+						ret.Add(i);
+						maxHeight = buildings[i];
+					}
+				}
+			}
+
+			ret.Sort();
+			return ret;
+		}
+
+		public static void TestSunsetViews()
+        {
+			int[] buildings = new int[] { 3, 5, 4, 4, 3, 1, 3, 2 };
+			string direction = "EAST";
+
+			Console.WriteLine(String.Join(",",SunsetViews(buildings,direction)));
+			Console.WriteLine("Expected: 1,3,6,7");
+
+        }
+		#endregion
+
+		#region BalancedBrackets
+		/*
 		 * https://www.algoexpert.io/questions/Balanced%20Brackets
 		 */
-        public static bool BalancedBrackets(string str)
+		public static bool BalancedBrackets(string str)
 		{
 			Stack<char> stack = new Stack<char>();
 			char current;
