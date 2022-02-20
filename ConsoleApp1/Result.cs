@@ -406,234 +406,6 @@ namespace AlgoTests
 
             Console.WriteLine($"Selection sort result of input {String.Join(",", input)}:\n{String.Join(",", SelectionSort(input))} ");
         }
-        /*
-         * Palindrome Check
-         */
-        public static bool IsPalindrome(string str)
-        {
-
-            // empty and 1 char lenght test
-            if (str.Length == 0)
-                return false;
-            else if (str.Length == 1)
-                return true;
-
-            // Interate thru string to its middle, comparing com simetric position
-            for (int x = 0; x < str.Length / 2; x++)
-            {
-                // Compare current position with simetric
-                if (str.Substring(x, 1) != str.Substring(str.Length - 1 - x, 1))
-                    return false;
-            }
-
-            // Write your code here.
-            return true;
-        }
-        public static void TestIsPalindrome()
-        {
-            string input = "arararas";
-
-            Console.WriteLine($"String {input} palindrome check: {IsPalindrome(input)}");
-        }
-        /*
-         * Ceasar Cypher Encryption
-         */
-        public static string CaesarCypherEncryptor(string str, int key)
-        {
-
-            char[] chars = str.ToCharArray();
-
-            // Iterate thru string
-            for (int x = 0; x < str.Length; x++)
-            {
-                // Increment letter by key positions
-                int p = (int)chars[x] + key;
-
-                // If we got beyond z char
-                while (p > (int)'z')
-                {
-                    p = (int)'a' + (p - (int)'z' - 1);
-                }
-
-                // Replace char from input string with shifted char
-                str = str.Remove(x, 1);
-                str = str.Insert(x, ((char)p).ToString());
-            }
-
-            return str;
-        }
-        public static void TestCeaserCypherEncryptor()
-        {
-            string input = "abcdefgtuvwzyz";
-            int key = 30;
-
-            Console.WriteLine($"The string {input} coded with Ceasar Encryptor is: {CaesarCypherEncryptor(input, key)}");
-        }
-        /*
-         *   Run Lenght encoding
-         */
-        public static string RunLengthEncoding(string str)
-        {
-            // initial lenght test
-            if (str.Length == 0)
-                return str;
-            else if (str.Length == 1)
-                return "1" + str;
-
-            // store last char - initialize with first character from string
-            string lastChar = null;
-
-            // store continuous char count - number of instances of same char in string
-            int charRepeat = 0;
-
-            // sb will store our output - string builder is used for better performace as we are going to manipulate output string
-            StringBuilder sb = new StringBuilder();
-
-            // Iterate thru string, starting at the second position 
-            for (int x = 0; x < str.Length; x++)
-            {
-                // Check if its the same char as the last one
-                if (lastChar == null || lastChar == str.Substring(x, 1))
-                {
-                    // increment repeated char count
-                    charRepeat++;
-
-                    // if we reached 9 repeated chars
-                    if (charRepeat == 9)
-                    {
-                        sb.Append("9" + lastChar);
-                        charRepeat = 0;
-                        lastChar = null;
-                    }
-                    else
-                    {
-                        // update last char
-                        lastChar = str.Substring(x, 1);
-                    }
-
-                }
-                else
-                {
-
-                    // Write repetition counter and last char to output stringbuilder
-                    sb.Append(charRepeat.ToString() + lastChar);
-                    charRepeat = 1;
-
-                    // update last char
-                    lastChar = str.Substring(x, 1);
-
-                }
-
-                // at the last element
-                if (x == str.Length - 1)
-                {
-                    sb.Append(charRepeat.ToString() + lastChar);
-                }
-
-            }
-
-            // returns string from sb
-            return sb.ToString();
-        }
-        public static void TestRunLengthEncoding()
-        {
-            string input = "aaaaaaaaaaaaaaaaaaaabbbbbfghu";
-
-            Console.WriteLine($"The string {input} Run Length encoded is : {RunLengthEncoding(input)}");
-        }
-        /*
-         * Generate Document
-         */
-        public static bool GenerateDocument(string characters, string document)
-        {
-            char[] array = characters.ToCharArray();
-
-            for (int x = 0; x < document.Length; x++)
-            {
-                // Check if array contens document character
-                int p = Array.IndexOf(array, document.Substring(x, 1).ToCharArray()[0]);
-
-                // If it contains
-                if (p >= 0)
-                {
-                    // Remove it from array - mark position with char null;
-                    array[p] = (char)0;
-                }
-                // if it does not contains
-                else
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-        public static void TestGenerateDocument()
-        {
-            string availableChars = "Bste!hetsi ogEAxpelrt x ";
-            string document = "AlgoExpert is the Best!!";
-
-            Console.Write($"Generate Docoument: {GenerateDocument(availableChars, document)}");
-        }
-        public static int FirstNonRepeatingCharacter(string str)
-        {
-            // Dictionary to store characters and the quantity they appeared
-            Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();
-
-            // Iterate thru input string
-            for (int x = 0; x < str.Length; x++)
-            {
-                // Gets character of x position
-                string thisChar = str.Substring(x, 1);
-
-                // Check if it is in the dictionary
-                if (keyValuePairs.ContainsKey(thisChar))
-                {
-                    // if found, increment its counter
-                    keyValuePairs[thisChar]++;
-                }
-                else
-                {
-                    // if not found, insert with 1 as counter
-                    keyValuePairs.Add(thisChar, 1);
-                }
-            }
-
-            // Iterante thru dictionary
-            foreach (var item in keyValuePairs)
-            {
-                if (item.Value == 1)
-                {
-                    string firstChar = item.Key;
-                    // Search position of firstChar at the input String
-                    return str.IndexOf(firstChar);
-                }
-            }
-
-            return -1;
-        }
-        public static void TestFirstNonRepeatingCharacter()
-        {
-            string input = "ax1xddffeebcdcafasdfasdfasdfghjdgfhdfghertwertwertç098765432";
-
-            Console.WriteLine($"First NonRepeating Character of string {input} was found at position {FirstNonRepeatingCharacter(input)}");
-
-        }
-        class ArrayComparer : EqualityComparer<int[]>
-        {
-            public override bool Equals(int[] x, int[] y)
-            {
-                if (x[0] == y[0] && x[1] == y[1] && x[2] == y[2])
-                    return true;
-                else
-                    return false;
-            }
-
-            public override int GetHashCode(int[] obj)
-            {
-                throw new NotImplementedException();
-            }
-        }
         public static List<int[]> ThreeNumberSum(int[] array, int targetSum)
         {
             List<int[]> result = new List<int[]>();
@@ -687,6 +459,20 @@ namespace AlgoTests
 
             return result;
         }
+        class ArrayComparer : EqualityComparer<int[]>
+        {
+            public override bool Equals(int[] x, int[] y)
+            {
+                if (x[0] == y[0] && x[1] == y[1] && x[2] == y[2])
+                    return true;
+                else
+                    return false;
+            }
 
+            public override int GetHashCode(int[] obj)
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

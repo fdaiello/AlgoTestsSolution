@@ -10,7 +10,7 @@ namespace AlgoTests
         static void Main(string[] args) 
         {
 
-            StackSolutions.TestNextGreaterElement();
+            StringSolutions.TestLongestPalindromicSubstring();
         }
     }
 }
