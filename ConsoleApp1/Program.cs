@@ -10,7 +10,7 @@ namespace AlgoTests
         static void Main(string[] args) 
         {
 
-            LinkedListSolutions.TestDoubleLinkedList();
+            LinkedListSolutions.TestRemoveKthNodeFromEnd();
         }
     }
 }

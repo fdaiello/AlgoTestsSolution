@@ -6,6 +6,101 @@ namespace AlgoTests
 {
     class LinkedListSolutions
     {
+		#region RemoveKthNodeFromEnd
+		/*
+		 * https://www.algoexpert.io/questions/Remove%20Kth%20Node%20From%20End
+		 */
+		public static void RemoveKthNodeFromEnd(LinkedList head, int k)
+		{
+
+			LinkedList p = head;
+			LinkedList kTh = null;
+			LinkedList kThPrev = null;
+
+			while (p != null)
+            {
+				p = p.Next;
+				if (kTh != null)
+				{
+					kTh = kTh.Next;
+				}
+				else if (k == 1)
+                {
+					kTh = head;
+                }
+				if (kThPrev != null)
+				{
+					kThPrev = kThPrev.Next;
+				}
+				else if (k == 0)
+				{
+					kThPrev = head;
+				}
+				k--;
+			}
+
+			if (kThPrev != null)
+            {
+				kThPrev.Next = kTh.Next;
+			}
+			else
+            {
+				head.Value = head.Next.Value;
+				head.Next = head.Next.Next;
+			}
+
+		}
+		public static void TestRemoveKthNodeFromEnd()
+        {
+			LinkedList node = new LinkedList(0)
+            {
+				Next = new LinkedList(1)
+				{
+					Next = new LinkedList(2)
+					{
+						Next = new LinkedList(3)
+						{
+							Next = new LinkedList(4)
+							{
+								Next = new LinkedList(5)
+								{
+									Next = new LinkedList(6)
+									{
+										Next = new LinkedList(7)
+										{
+											Next = new LinkedList(8)
+											{
+												Next = new LinkedList(9)
+											}
+										}
+									}
+
+								}
+							}
+						}
+					}
+				}
+			};
+
+			RemoveKthNodeFromEnd(node, 10);
+			while (node != null)
+            {
+				Console.Write(node.Value + "->");
+				node = node.Next;
+			}
+
+		}
+		public class LinkedList
+		{
+			public int Value;
+			public LinkedList Next = null;
+
+			public LinkedList(int value)
+			{
+				this.Value = value;
+			}
+		}
+		#endregion
 		#region DoubleLinkedList
 		public static void TestDoubleLinkedList()
         {
