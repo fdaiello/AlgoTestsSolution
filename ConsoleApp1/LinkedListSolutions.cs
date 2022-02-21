@@ -6,6 +6,83 @@ namespace AlgoTests
 {
     class LinkedListSolutions
     {
+		#region SumOfLinkedList
+		/*
+		 * https://www.algoexpert.io/questions/Sum%20of%20Linked%20Lists
+		 */
+		public static LinkedList SumOfLinkedLists(LinkedList linkedListOne, LinkedList linkedListTwo)
+		{
+
+			int n1 = 0;
+			int c1 = 1;
+			while ( linkedListOne != null)
+            {
+				n1 = n1 + linkedListOne.value * c1;
+				c1*=10;
+				linkedListOne = linkedListOne.next;
+            }
+
+			int n2 = 0;
+			int c2 = 1;
+			while (linkedListTwo != null)
+			{
+				n2 = n2 + linkedListTwo.value * c2;
+				c2 *= 10;
+				linkedListTwo = linkedListTwo.next;
+			}
+
+			int n3 = n1 + n2;
+
+			LinkedList digit;
+			LinkedList digitAnt = null;
+			LinkedList digitFirst = null;
+
+			if (n3 == 0)
+				return new LinkedList(0);
+
+			while ( n3 > 0)
+            {
+				digit = new LinkedList(n3 % 10);
+				if (digitAnt != null)
+					digitAnt.next = digit;
+				if (digitFirst == null)
+					digitFirst = digit;
+				digitAnt = digit;
+
+				n3 /= 10;
+
+			}
+
+			return digitFirst;
+		}
+		public static void TestSumOfLinkedList()
+        {
+			LinkedList l2 = new LinkedList(0);
+			LinkedList l4 = new LinkedList(0);
+			LinkedList l7 = new LinkedList(0);
+			LinkedList l1 = new LinkedList(5);
+			l2.next = l4;
+			l4.next = l7;
+			l7.next = l1;
+
+			LinkedList l9 = new LinkedList(9);
+			//LinkedList l4b = new LinkedList(4);
+			//LinkedList l5 = new LinkedList(5);
+			//l9.next = l4b;
+			//l4b.next = l5;
+
+			LinkedList Result = SumOfLinkedLists(l2, l9);
+
+			while ( Result != null)
+            {
+				Console.Write(Result.value);
+				Result = Result.next;
+            }
+
+
+			
+		}
+		#endregion
 		#region RemoveKthNodeFromEnd
 		/*
 		 * https://www.algoexpert.io/questions/Remove%20Kth%20Node%20From%20End
@@ -19,10 +96,10 @@ namespace AlgoTests
 
 			while (p != null)
             {
-				p = p.Next;
+				p = p.next;
 				if (kTh != null)
 				{
-					kTh = kTh.Next;
+					kTh = kTh.next;
 				}
 				else if (k == 1)
                 {
@@ -30,7 +107,7 @@ namespace AlgoTests
                 }
 				if (kThPrev != null)
 				{
-					kThPrev = kThPrev.Next;
+					kThPrev = kThPrev.next;
 				}
 				else if (k == 0)
 				{
@@ -41,12 +118,12 @@ namespace AlgoTests
 
 			if (kThPrev != null)
             {
-				kThPrev.Next = kTh.Next;
+				kThPrev.next = kTh.next;
 			}
 			else
             {
-				head.Value = head.Next.Value;
-				head.Next = head.Next.Next;
+				head.value = head.next.value;
+				head.next = head.next.next;
 			}
 
 		}
@@ -54,23 +131,23 @@ namespace AlgoTests
         {
 			LinkedList node = new LinkedList(0)
             {
-				Next = new LinkedList(1)
+				next = new LinkedList(1)
 				{
-					Next = new LinkedList(2)
+					next = new LinkedList(2)
 					{
-						Next = new LinkedList(3)
+						next = new LinkedList(3)
 						{
-							Next = new LinkedList(4)
+							next = new LinkedList(4)
 							{
-								Next = new LinkedList(5)
+								next = new LinkedList(5)
 								{
-									Next = new LinkedList(6)
+									next = new LinkedList(6)
 									{
-										Next = new LinkedList(7)
+										next = new LinkedList(7)
 										{
-											Next = new LinkedList(8)
+											next = new LinkedList(8)
 											{
-												Next = new LinkedList(9)
+												next = new LinkedList(9)
 											}
 										}
 									}
@@ -85,19 +162,19 @@ namespace AlgoTests
 			RemoveKthNodeFromEnd(node, 10);
 			while (node != null)
             {
-				Console.Write(node.Value + "->");
-				node = node.Next;
+				Console.Write(node.value + "->");
+				node = node.next;
 			}
 
 		}
 		public class LinkedList
 		{
-			public int Value;
-			public LinkedList Next = null;
+			public int value;
+			public LinkedList next = null;
 
 			public LinkedList(int value)
 			{
-				this.Value = value;
+				this.value = value;
 			}
 		}
 		#endregion
