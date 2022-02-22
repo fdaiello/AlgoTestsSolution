@@ -7,6 +7,54 @@ namespace AlgoTests
 {
     class StringSolutions
     {
+        #region MinimumCharactersForWords
+        /*
+         * https://www.algoexpert.io/questions/Minimum%20Characters%20For%20Words
+         */
+        public static string[] MinimumCharactersForWords(string[] words)
+        {
+            Dictionary<char, int> allMap = new Dictionary<char, int>();
+
+            foreach( string word in words)
+            {
+                Dictionary<char, int> thisMap = new Dictionary<char, int>();
+                foreach ( char c in word)
+                {
+                    if (thisMap.ContainsKey(c))
+                    {
+                        thisMap[c]++;
+                        if (allMap[c] < thisMap[c])
+                            allMap[c] = thisMap[c];
+                    }
+                    else
+                    {
+                        thisMap.Add(c, 1);
+                        if (!allMap.ContainsKey(c))
+                        {
+                            allMap.Add(c, 1);
+                        }
+                    }
+                }
+            }
+
+            List<string> stringList = new List<string>();
+            foreach ( KeyValuePair<char,int> kv in allMap)
+            {
+                for (int i = 0; i < kv.Value; i++)
+                    stringList.Add(kv.Key.ToString());
+            }
+
+            return stringList.ToArray();
+        }
+        public static void TestMinimumCharactersForWords()
+        {
+            string[] words = new string[] { "this", "that", "did", "deed", "them!", "a" };
+
+            Console.WriteLine(String.Join(",", MinimumCharactersForWords(words)));
+            Console.WriteLine("Expected: \n't', 't', 'h', 'i', 's', 'a', 'd', 'd', 'e', 'e', 'm', '!'");
+
+        }
+        #endregion
         #region ReverseWordsInSTring
         /*
          *  https://www.algoexpert.io/questions/Reverse%20Words%20In%20String
