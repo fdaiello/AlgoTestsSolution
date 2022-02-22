@@ -1,11 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace AlgoTests
 {
     class StringSolutions
     {
+        #region GroupAnagrams
+        /*
+         * https://www.algoexpert.io/questions/Group%20Anagrams
+         */
+        public static List<List<string>> groupAnagrams(List<string> words)
+        {
+            List<List<string>> groups = new List<List<string>>();
+
+            foreach ( string s in words)
+            {
+                bool found = false;
+                foreach ( List<string> group in groups)
+                {
+                    if (IsAnagram(s, group[0]))
+                    {
+                        group.Add(s);
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if (!found)
+                {
+                    groups.Add(new List<string>() { s });
+                }
+
+            }
+
+            return groups;
+        }
+        public static void TestGroupAnagrams()
+        {
+            
+            List<string> words = new List<string>() { "yo", "act", "flop", "tac", "foo", "cat", "oy", "olfp" };
+
+            Console.WriteLine("[" + String.Join(", ",  groupAnagrams(words).Select(p => "{" + string.Join(", ", p) + "}" )) + ']');
+
+            Console.WriteLine("Expected: [[yo, oy], [flop, olfp], [act, tac, cat], [foo]]");
+
+        }
+        public static bool IsAnagram(string s1, string s2)
+        {
+            if (s1.Length != s2.Length)
+                return false;
+
+            var l2 = s2.ToList();
+            foreach ( char c in s1)
+            {
+                if (l2.Contains(c))
+                    l2.Remove(c);
+                else
+                    return false;
+            }
+
+            return true;
+        }
+        #endregion
         #region LongestPalindromicSubString
         /*
          * https://www.algoexpert.io/questions/Longest%20Palindromic%20Substring
@@ -179,7 +237,6 @@ namespace AlgoTests
 
         }
         #endregion
-
         #region PalindromeCheck
         /*
          * Palindrome Check
