@@ -6,6 +6,101 @@ namespace AlgoTests
 {
     class RecursionSolutions
     {
+        #region PhoneNumberMnemonics
+        /*
+         * https://www.algoexpert.io/questions/Phone%20Number%20Mnemonics
+         */
+        public static List<string> PhoneNumberMnemonics(string phoneNumber)
+        {
+            List<string> ret = new List<string>();
+
+            if (phoneNumber.Length == 1)
+            {
+                ret = GetPattern(phoneNumber);
+            }
+            else
+            {
+                string firstChar = phoneNumber[0].ToString();
+                string subStr = phoneNumber.Substring(1, phoneNumber.Length - 1);
+                
+                List<string> subList = PhoneNumberMnemonics(subStr);
+                List<string> firstList = GetPattern(firstChar);
+
+                foreach( string s in subList)
+                {
+                    foreach ( string f in firstList)
+                    {
+                        ret.Add(f+s);
+                    }
+                }
+            }
+
+            return ret;
+        }
+        public static List<string> GetPattern(string phoneNumber)
+        {
+            List<string> ret = new List<string>();
+
+            switch (phoneNumber)
+            {
+                case "0":
+                    ret.Add("0");
+                    break;
+                case "1":
+                    ret.Add("1");
+                    break;
+                case "2":
+                    ret.Add("a");
+                    ret.Add("b");
+                    ret.Add("c");
+                    break;
+                case "3":
+                    ret.Add("d");
+                    ret.Add("e");
+                    ret.Add("f");
+                    break;
+                case "4":
+                    ret.Add("g");
+                    ret.Add("h");
+                    ret.Add("i");
+                    break;
+                case "5":
+                    ret.Add("j");
+                    ret.Add("k");
+                    ret.Add("l");
+                    break;
+                case "6":
+                    ret.Add("m");
+                    ret.Add("n");
+                    ret.Add("o");
+                    break;
+                case "7":
+                    ret.Add("p");
+                    ret.Add("q");
+                    ret.Add("r");
+                    ret.Add("s");
+                    break;
+                case "8":
+                    ret.Add("t");
+                    ret.Add("u");
+                    ret.Add("v");
+                    break;
+                case "9":
+                    ret.Add("w");
+                    ret.Add("x");
+                    ret.Add("y");
+                    ret.Add("z");
+                    break;
+            }
+
+            return ret;
+        }
+        public static void TestPhoneNumberMenmonics()
+        {
+            string phoneNumber = "1905";
+            Console.WriteLine(String.Join("\n", PhoneNumberMnemonics(phoneNumber)));
+        }
+        #endregion
         #region powerset
         /*
          * https://www.algoexpert.io/questions/Powerset
