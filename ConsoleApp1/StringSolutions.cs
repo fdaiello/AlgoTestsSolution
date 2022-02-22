@@ -7,6 +7,23 @@ namespace AlgoTests
 {
     class StringSolutions
     {
+        #region ReverseWordsInSTring
+        /*
+         *  https://www.algoexpert.io/questions/Reverse%20Words%20In%20String
+         */
+        public static string ReverseWordsInString(string str)
+        {
+
+            return String.Join(" ",str.Split(" ").Reverse());
+
+        }
+        public static void TestReverseWordsInString()
+        {
+            string s1 = "AlgoExpert is the Best!";
+            Console.WriteLine(ReverseWordsInString(s1));
+            Console.WriteLine("Expected: Best! the is AlgoExpert");
+        }
+        #endregion
         #region ValidIpAdress
         /*
          *  https://www.algoexpert.io/questions/Valid%20IP%20Addresses
