@@ -6,6 +6,91 @@ namespace AlgoTests
 {
     class GraphSolutions
     {
+        #region MinimumPassesInMatrix
+        /*
+         *  https://www.algoexpert.io/questions/Minimum%20Passes%20Of%20Matrix
+         */
+        public static int MinimumPassesOfMatrix(int[][] matrix)
+        {
+
+            List<int[]> visited = new List<int[]>();
+            Queue<int[]> queue = new Queue<int[]>();
+            int level = 0;
+            int cNegative = 0;
+
+            for ( int i =0; i<matrix.Length; i++)
+            {
+                for ( int j=0; j<matrix[0].Length; j++)
+                {
+                    if ( matrix[i][j] > 0)
+                    {
+                        queue.Enqueue(new int[] { i, j, level });
+                    }
+                    else if (matrix[i][j] < 0)
+                    {
+                        cNegative++;
+                    }
+                }
+            }
+
+            while (queue.Count > 0)
+            {
+                int[] node = queue.Dequeue();
+                if (node[2] > level)
+                    level = node[2];
+
+                visited.Add(new int[] { node[0], node[1] });
+
+                if ( node[0] > 0 && matrix[node[0]-1][node[1]]<0 && !visited.Contains(new int[] { node[0]-1, node[1] }))
+                {
+                    visited.Add(new int[] { node[0]-1, node[1] });
+                    queue.Enqueue(new int[] { node[0]-1, node[1], level + 1 });
+                    matrix[node[0] - 1][node[1]] *= -1;
+                    cNegative--;
+                }
+                if ( node[1] < matrix[0].Length-1 && matrix[node[0]][node[1]+1] < 0 && !visited.Contains(new int[] { node[0], node[1]+1 }))
+                {
+                    visited.Add(new int[] { node[0], node[1]+1 });
+                    queue.Enqueue(new int[] { node[0], node[1]+1, level + 1 });
+                    matrix[node[0]][node[1]+1] *= -1;
+                    cNegative--;
+                }
+                if (node[0] < matrix.Length-1 && matrix[node[0] + 1][node[1]] < 0 && !visited.Contains(new int[] { node[0] + 1, node[1] }))
+                {
+                    visited.Add(new int[] { node[0] + 1, node[1] });
+                    queue.Enqueue(new int[] { node[0] + 1, node[1], level + 1 });
+                    matrix[node[0] + 1][node[1]] *= -1;
+                    cNegative--;
+                }
+                if (node[1] > 0 && matrix[node[0]][node[1] - 1] < 0 && !visited.Contains(new int[] { node[0], node[1] - 1 }))
+                {
+                    visited.Add(new int[] { node[0], node[1] - 1 });
+                    queue.Enqueue(new int[] { node[0], node[1] - 1, level + 1 });
+                    matrix[node[0]][node[1] - 1] *= -1;
+                    cNegative--;
+                }
+            }
+
+            if (cNegative == 0)
+                return level;
+            else
+                return -1;
+
+        }
+        public static void TestMinimumPassesOfMatrix()
+        {
+            int[][] matrix = new int[][]
+            {
+                new int [] { 0, -1, -3, 2, 0},
+                new int [] {1, -2, -5, -1, -3 },
+                new int [] {3, 0, 0, -4, -1 }
+            };
+
+            Console.WriteLine(MinimumPassesOfMatrix(matrix));
+            Console.WriteLine("Expected: 3");
+
+        }
+        #endregion
         #region CycleInGraph
         /*
          * https://www.algoexpert.io/questions/Cycle%20In%20Graph
