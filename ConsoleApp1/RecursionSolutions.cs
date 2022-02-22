@@ -249,6 +249,46 @@ namespace AlgoTests
             Console.Write(String.Join(" - ", GetPermutations(a).Select(p => String.Join(",", p))));
         }
         #endregion
+        #region Fibonacci
+        /*
+         * Fibonaci sequence
+         */
+        public static int GetNthFib(int n)
+        {
+            if (FibonaciCache is null)
+                FibonaciCache = new Dictionary<int, int>();
+
+            if (FibonaciCache.ContainsKey(n))
+                return FibonaciCache[n];
+
+            else
+            {
+                int result;
+
+                if (n <= 0)
+                    result = -1;
+                else if (n == 1)
+                    result = 0;
+                else if (n == 2)
+                    result = 1;
+                else
+                    result = GetNthFib(n - 1) + GetNthFib(n - 2);
+
+                FibonaciCache.Add(n, result);
+                return result;
+            }
+
+        }
+        public static Dictionary<int, int> FibonaciCache { get; set; }
+
+        public static void TestFibonaciSequence()
+        {
+
+            int n = 6;
+            Console.WriteLine($"Fibonaci Sequence. Position {n} result is {GetNthFib(n)}");
+
+        }
+        #endregion
     }
 
 }

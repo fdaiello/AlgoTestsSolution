@@ -499,6 +499,60 @@ namespace AlgoTests
 				this.Value = value;
 			}
 		}
-        #endregion
-    }
+		#endregion
+		#region RemoveDuplicate
+		public static LinkedList RemoveDuplicatesFromLinkedList(LinkedList linkedList)
+		{
+			LinkedList node = linkedList;
+
+			do
+			{
+				if (node.value == node.next?.value)
+					node.next = node.next?.next;
+				else
+					node = node.next;
+
+			} while (node != null);
+
+			return linkedList;
+		}
+		public static void TestRemoveDuplicatesFromLinkedList()
+		{
+			LinkedList linkedList = new LinkedList(1)
+			{
+				next = new LinkedList(1)
+				{
+					next = new LinkedList(3)
+					{
+						next = new LinkedList(4)
+						{
+							next = new LinkedList(4)
+							{
+								next = new LinkedList(4)
+								{
+									next = new LinkedList(5)
+									{
+										next = new LinkedList(6)
+										{
+											next = new LinkedList(6)
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			};
+
+			LinkedList linkedList1 = RemoveDuplicatesFromLinkedList(linkedList);
+
+			do
+			{
+				Console.Write(linkedList1.value + ",");
+				linkedList1 = linkedList1.next;
+			} while (linkedList1 != null);
+
+		}
+		#endregion
+	}
 }
