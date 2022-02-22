@@ -7,6 +7,41 @@ namespace AlgoTests
 {
     class StringSolutions
     {
+        #region ValidIpAdress
+        /*
+         *  https://www.algoexpert.io/questions/Valid%20IP%20Addresses
+         */
+        public static List<string> ValidIPAddresses(string str, int level=0)
+        {
+            if (level == 3 && str.Length < 4 && Int32.Parse(str) < 256 && (str.Length == 1 || str[0] != '0'))
+                return new List<string> { str };
+
+            List<string> list = new List<string>();
+
+            for (int i = 1; i < 4 && i < str.Length; i++)
+            {
+                if (int.Parse(str.Substring(0, i)) < 256 && (i == 1 || str[0] != '0'))
+                {
+                    var byteLists = ValidIPAddresses(str.Substring(i, str.Length - i), level + 1);
+                    if (byteLists.Any())
+                    {
+                        foreach (string tByte in byteLists)
+                        {
+                            list.Add(str.Substring(0, i) + "." + tByte);
+                        }
+                    }
+                }
+            }
+
+            return list;
+
+        }
+        public static void TestValidIpAdress()
+        {
+            string str = "1401221240";
+            Console.WriteLine(String.Join("\n", ValidIPAddresses(str)));
+        }
+        #endregion
         #region GroupAnagrams
         /*
          * https://www.algoexpert.io/questions/Group%20Anagrams
