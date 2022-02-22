@@ -10,7 +10,7 @@ namespace AlgoTests
         static void Main(string[] args) 
         {
 
-            RecursionSolutions.TestPhoneNumberMenmonics();
+            RecursionSolutions.TestStairCaseTraversal();
         }
     }
 }

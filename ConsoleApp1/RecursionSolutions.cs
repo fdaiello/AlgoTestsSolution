@@ -6,6 +6,58 @@ namespace AlgoTests
 {
     class RecursionSolutions
     {
+        #region StaircaseTraversal
+        /*
+         *  https://www.algoexpert.io/questions/Staircase%20Traversal
+         */
+        public static int StaircaseTraversal(int height, int maxSteps)
+        {
+            int ways = 0;
+
+            if (height < 2)
+                return 1;
+
+            else
+            {
+                for ( int i=1; i <= maxSteps && i <= height; i++)
+                {
+                    ways += StaircaseTraversal(height - i, maxSteps);
+                }
+            }
+
+            return ways;
+        }
+        public static void TestStairCaseTraversal()
+        {
+            int height = 0;
+            int steps = 2;
+            Console.WriteLine(StaircaseTraversal(height, steps));
+            Console.WriteLine("Expected: 1");
+
+            height = 1;
+            steps = 2;
+            Console.WriteLine(StaircaseTraversal(height, steps));
+            Console.WriteLine("Expected: 1");
+
+            height = 2;
+            steps = 2;
+            Console.WriteLine(StaircaseTraversal(height, steps));
+            Console.WriteLine("Expected: 2");
+
+            height = 3;
+            steps = 3;
+            Console.WriteLine(StaircaseTraversal(height, steps));
+            Console.WriteLine("Expected: 4");
+
+
+            height = 4;
+            steps = 2;
+
+            Console.WriteLine(StaircaseTraversal(height, steps));
+            Console.WriteLine("Expected: 5");
+
+        }
+        #endregion
         #region PhoneNumberMnemonics
         /*
          * https://www.algoexpert.io/questions/Phone%20Number%20Mnemonics
