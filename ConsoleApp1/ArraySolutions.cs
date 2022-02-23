@@ -6,6 +6,97 @@ namespace AlgoTests
 {
     public class ArraySolutions
     {
+        #region MinRewards
+        /*
+         * https://www.algoexpert.io/questions/Min%20Rewards
+         */
+        public static int MinRewards(int[] scores)
+        {
+            int[] rewards = new int[scores.Length];
+            rewards[0] = 1;
+
+            for (int i = 1; i < scores.Length; i++)
+            {
+                if (scores[i] > scores[i - 1])
+                    rewards[i] = rewards[i - 1] + 1;
+                else
+                    rewards[i] = 1;
+            }
+            for ( int i=scores.Length-2; i>=0; i--)
+            {
+                if (scores[i] > scores[i + 1])
+                    rewards[i] = Math.Max(rewards[i], rewards[i + 1]+1);
+            }
+
+            return rewards.Sum();
+        }
+        public static int MinRewards1(int[] scores)
+        {
+            int[] rewards = new int[scores.Length];
+            rewards[0] = 1;
+
+            List<int> localMins = new List<int>();
+            for ( int i =0; i< scores.Length; i++)
+            {
+                if ( (i==0 || scores[i-1] > scores[i]) && ( i==scores.Length-1 || scores[i] < scores[i+1] ))
+                {
+                    localMins.Add(i);
+                    rewards[i] = 1;
+                }
+            }
+
+            foreach ( int i in localMins)
+            {
+                for ( int j=i-1; j>=0; j--)
+                {
+                    if (scores[j] > scores[j + 1])
+                        rewards[j] = Math.Max(rewards[j], rewards[j + 1] + 1);
+                    else
+                        break;
+                }
+                for ( int j=i+1; j<scores.Length; j++)
+                {
+                    if (scores[j] > scores[j-1])
+                        rewards[j] = Math.Max(rewards[j], rewards[j - 1] + 1);
+                    else
+                        break;
+                }
+            }
+
+            return rewards.Sum();
+        }
+
+        public static int MinRewards0(int[] scores)
+        {
+            int[] rewards = new int[scores.Length];
+            rewards[0] = 1;
+
+            for ( int i =1; i<scores.Length; i++)
+            {
+                if (scores[i] > scores[i - 1])
+                    rewards[i] = rewards[i-1]+1;
+                else if ( scores[i] < scores[i - 1])
+                {
+                    rewards[i] = 1;
+                    for ( int j=i-1; j>=0; j--)
+                    {
+                        if (scores[j] > scores[j + 1])
+                            rewards[j] = Math.Max(rewards[j], rewards[j + 1] + 1);
+                        else
+                            break;
+                    }
+                }
+            }
+
+            return rewards.Sum();
+        }
+        public static void TestMinRewards()
+        {
+            int[] scores = new int[] { 8, 4, 2, 1, 3, 6, 7, 9, 5 };
+            Console.WriteLine(MinRewards(scores));
+            Console.WriteLine("Expected: 25");
+        }
+        #endregion
         #region LargestRange
         /*
          * https://www.algoexpert.io/questions/Largest%20Range
