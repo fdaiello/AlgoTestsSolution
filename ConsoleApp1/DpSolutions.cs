@@ -6,6 +6,44 @@ namespace AlgoTests
 {
     public class DpSolutions
     {
+		#region WaterArea
+		/*
+		 * https://www.algoexpert.io/questions/Water%20Area
+		 */
+		public static int WaterArea(int[] heights)
+		{
+			int[] maxLeft = new int[heights.Length];
+			int[] maxRight = new int[heights.Length];
+			int max = 0;
+			int area = 0;
+			
+			for ( int i =0; i<heights.Length; i++)
+            {
+				maxLeft[i] = max;
+				if (heights[i] > max)
+					max = heights[i];
+            }
+			max = 0;
+			for ( int i = heights.Length-1; i>=0; i--)
+            {
+				maxRight[i] = max;
+				if (heights[i] > max)
+					max = heights[i];
+				if (Math.Min(maxLeft[i], maxRight[i]) - heights[i] > 0)
+					area += Math.Min(maxLeft[i], maxRight[i]) - heights[i];
+            }
+
+			return area;
+		}
+		public static void TestWaterArea()
+        {
+			int[] heights = new int[] { 0, 8, 0, 0, 5, 0, 0, 10, 0, 0, 1, 1, 0, 3 };
+
+			Console.WriteLine(WaterArea(heights));
+			Console.WriteLine("Expected: 48");
+
+        }
+		#endregion
 		#region MinNumberOfJumps
 		/*
 		 * https://www.algoexpert.io/questions/Min%20Number%20Of%20Jumps
