@@ -6,6 +6,156 @@ namespace AlgoTests
 {
     public class DpSolutions
     {
+		#region KnapSackProblem
+		/*
+		 *  https://www.algoexpert.io/questions/Knapsack%20Problem
+		 */
+		public static List<List<int>> KnapsackProblem(int[,] items, int capacity)
+		{
+			int[,] values = new int[items.GetLength(0)+1, capacity + 1];
+
+			for ( int i=1; i < values.GetLength(0); i++)
+            {
+				for ( int j=1;j<=capacity; j++)
+                {
+					// i = capacity of knapsack - up to this point
+					// items[i,0] value of iTh item
+					// items[i,1] weight of iTh item
+					// values [i,j] max amount of value we can store of all itens up to the iTh item
+
+					// Can we store this item ?
+					if (items[i-1, 1] <= j)
+					{
+						// value if we put this Item = Value of this item plus the MaxValue we can store on the weight that rests
+						int max1 = items[i-1, 0] + values[i - 1, j - items[i-1, 1]];
+						values[i, j] = Math.Max(max1, values[i - 1, j]);
+					}
+					else 
+					{
+						values[i, j] = values[i - 1, j];
+					}
+
+                }
+            }
+
+			List<int> totalValue = new List<int> { values[values.GetLength(0) - 1, values.GetLength(1) - 1] };
+
+
+			// Check wich items were used
+			List<int> finalItems = new List<int>();
+
+			int k = capacity;
+			int i1 = values.GetLength(0) - 1;
+			while ( k > 0 && i1>0)
+            {
+				while (values[i1, k] == values[i1 - 1, k] && i1 > 1)
+					i1--;
+
+				if (values[i1, k] > values[i1 - 1, k])
+					finalItems.Add(i1 - 1);
+
+				i1--;
+				k -= items[i1, 1];
+
+			}
+
+
+			var result = new List<List<int>>();
+			result.Add(totalValue);
+			result.Add(finalItems);
+			return result;
+		}
+		/*
+		 *  This is a Tryal I did, getting the items that have the greater value/weight ration first.
+		 *  But it wont solve all cases ....
+		 */
+		public static List<List<int>> KnapsackProblem0(int[,] items, int capacity)
+		{
+
+			int[][] items2 = new int[items.GetLength(0)][];
+			Dictionary<string, int> indexes = new Dictionary<string, int>();
+			for (int i = 0; i < items.GetLength(0); i++)
+            {
+				items2[i] = new int[] { items[i, 0], items[i, 1] };
+				indexes.Add( items[i, 0].ToString() + "x" + items[i, 1].ToString() , i);
+			}
+
+			Array.Sort(items2, (x, y) => ((decimal)x[0] / x[1]).CompareTo((decimal)y[0] / y[1]));
+			
+			List<int> finalItems = new List<int>();
+
+			int value = 0;
+			int weight = 0;
+			for ( int j=items2.Length-1; j>=0 && weight + items2[j][1] <= capacity; j--)
+            {
+				weight += items2[j][1];
+				value += items2[j][0];
+
+				finalItems.Add(indexes[items2[j][0].ToString() + "x" + items2[j][1].ToString()]);
+            }
+
+			// Replace the code below.
+			List<int> totalValue = new List<int> { value };
+
+			var result = new List<List<int>>();
+			result.Add(totalValue);
+			result.Add(finalItems);
+			return result;
+		}
+		public static void TestKnapSack()
+		{
+			int[,] items = new int[,] { { 1, 2 }, { 4, 3 }, { 5, 6 }, { 6, 7 } };
+			int capacity = 10;
+			Console.WriteLine(String.Join(",", KnapsackProblem(items, capacity).Select(p => "[" + String.Join(",", p) + "]")));
+			Console.WriteLine("Expected: 10, [1,3]");
+
+
+			items = new int[,] { { 465, 100 }, { 400, 85 }, { 255, 55 }, { 350, 45 }, { 650, 130 }, { 1000, 190 }, { 455, 100 }, { 100, 25 }, { 1200, 190 }, { 320, 65 }, { 750, 100 }, { 50, 45 }, { 550, 65 }, { 100, 50 }, { 600, 70 }, { 240, 40 } };
+			capacity = 200;
+			Console.WriteLine(String.Join(",", KnapsackProblem(items, capacity).Select(p => "[" + String.Join(",", p) + "]")));
+			Console.WriteLine("Expected: 1500, [3, 12, 14]");
+
+
+		}
+		#endregion
+		#region WaterArea
+		/*
+		 * https://www.algoexpert.io/questions/Water%20Area
+		 */
+		public static int WaterArea(int[] heights)
+		{
+			int[] maxLeft = new int[heights.Length];
+			int[] maxRight = new int[heights.Length];
+			int max = 0;
+			int area = 0;
+			
+			for ( int i =0; i<heights.Length; i++)
+            {
+				maxLeft[i] = max;
+				if (heights[i] > max)
+					max = heights[i];
+            }
+			max = 0;
+			for ( int i = heights.Length-1; i>=0; i--)
+            {
+				maxRight[i] = max;
+				if (heights[i] > max)
+					max = heights[i];
+				if (Math.Min(maxLeft[i], maxRight[i]) - heights[i] > 0)
+					area += Math.Min(maxLeft[i], maxRight[i]) - heights[i];
+            }
+
+			return area;
+		}
+		public static void TestWaterArea()
+        {
+			int[] heights = new int[] { 0, 8, 0, 0, 5, 0, 0, 10, 0, 0, 1, 1, 0, 3 };
+
+			Console.WriteLine(WaterArea(heights));
+			Console.WriteLine("Expected: 48");
+
+        }
+		#endregion
 		#region MinNumberOfJumps
 		/*
 		 * https://www.algoexpert.io/questions/Min%20Number%20Of%20Jumps
