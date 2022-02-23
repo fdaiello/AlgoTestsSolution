@@ -10,7 +10,8 @@ namespace AlgoTests
         static void Main(string[] args) 
         {
 
-            TrieSolutions.TestSuffixTrie();
+            ArraySolutions.TestLargestRange();
+
         }
     }
 }

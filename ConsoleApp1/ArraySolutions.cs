@@ -6,6 +6,63 @@ namespace AlgoTests
 {
     public class ArraySolutions
     {
+        #region LargestRange
+        /*
+         * https://www.algoexpert.io/questions/Largest%20Range
+         */
+        public static int[] LargestRange(int[] array)
+        {
+            if (array.Length < 2)
+                return array;
+
+            int MaxRangeStart = 0;
+            int MaxRangeEnd = 0;
+            int ThisRangeStart = 0;
+
+            Array.Sort(array);
+
+            for ( int i =1; i<array.Length; i++)
+            {
+                if ( array[i] - array[i-1] == 1 || array[i] == array[i-1] && array[MaxRangeStart] != array[i])
+                {
+                    if ( i-ThisRangeStart > MaxRangeEnd - MaxRangeStart)
+                    {
+                        MaxRangeStart = ThisRangeStart;
+                        MaxRangeEnd = i;
+                    }
+                }
+                else
+                {
+                    ThisRangeStart = i;
+                }
+            }
+
+            return new int[] { array[MaxRangeStart], array[MaxRangeEnd] };
+        }
+        public static void TestLargestRange()
+        {
+            int[] array = new int[] { 1, 11, 3, 0, 15, 5, 2, 4, 10, 7, 12, 6 };
+            Console.WriteLine(String.Join(",", LargestRange(array)));
+            Console.WriteLine("Expected: 0,7");
+
+            array = new int[] { 1, 11, 3, 0, 15, 5, 2, 4, 10, 7, 12, 6, 20, 21, 22, 23, 24, 25, 26, 27, 28 };
+            Console.WriteLine(String.Join(",", LargestRange(array)));
+            Console.WriteLine("Expected: 28,28");
+
+            array = new int[] { 1, 11, 3, 0, 15, 5, 2, 4, 10, 7, 12, 6, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 36, 37 };
+            Console.WriteLine(String.Join(",", LargestRange(array)));
+            Console.WriteLine("Expected: 28,28");
+
+            array = new int[] { 19, -1, 18, 17, 2, 10, 3, 12, 5, 16, 4, 11, 8, 7, 6, 15, 12, 12, 2, 1, 6, 13, 14 };
+            Console.WriteLine(String.Join(",", LargestRange(array)));
+            Console.WriteLine("Expected: 10,19");
+
+            array = new int[] { 1, 1, 1, 3, 4 };
+            Console.WriteLine(String.Join(",", LargestRange(array)));
+            Console.WriteLine("Expected: 3, 4");
+
+        }
+        #endregion
         #region FourNumbersum
         /*
          * https://www.algoexpert.io/questions/Four%20Number%20Sum
