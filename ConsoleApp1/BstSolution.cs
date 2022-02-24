@@ -7,6 +7,79 @@ namespace AlgoTests
 {
     public static class BstSolution
     {
+        #region maxPathSum
+        /*
+         * https://www.algoexpert.io/questions/Max%20Path%20Sum%20In%20Binary%20Tree
+         */
+        public static int MaxPathSum(BinaryTree tree)
+        {
+            int suml1 = 0;
+            int suml2 = 0;
+            int sumr1 = 0;
+            int sumr2 = 0;
+
+            if (tree.left != null)
+            {
+                MaxPathSum2(tree.left, ref suml1, ref suml2);
+            }
+            if (tree.right != null)
+            {
+                MaxPathSum2(tree.left, ref sumr1, ref sumr2);
+            }
+
+
+            return Math.Max(sumr2,Math.Max(suml2,tree.value+suml1+sumr1));
+
+        }
+        public static void MaxPathSum2(BinaryTree tree, ref int sum1, ref int sum2)
+        {
+            int suml1 = 0;
+            int suml2 = 0;
+            int sumr1 = 0;
+            int sumr2 = 0;
+
+            if (tree.left != null )
+            {
+                MaxPathSum2(tree.left, ref suml1, ref suml2);
+            }
+            if (tree.right != null)
+            {
+                MaxPathSum2(tree.right, ref sumr1, ref sumr2);
+            }
+
+            sum1 = tree.value + Math.Max(suml1, sumr1);
+            sum2 = tree.value + suml2 + sumr2;
+
+        }
+        public static void TestMaxPathSum()
+        {
+            BinaryTree tree = new BinaryTree(1)
+            {
+                value = 1,
+                left = new BinaryTree(2)
+                {
+                    left = new BinaryTree(4)
+                    {
+                        left = new BinaryTree(8)
+                        {
+                            right = new BinaryTree(10)
+                        },
+                        right = new BinaryTree(9) 
+                    },
+                    right = new BinaryTree(5)
+                },
+                right = new BinaryTree(3)
+                {
+                    left = new BinaryTree(6),
+                    right = new BinaryTree(7),
+                }
+            };
+
+            Console.WriteLine(MaxPathSum(tree));
+            Console.WriteLine("Expected: 25");
+
+        }
+        #endregion
         #region ValidateThreeNodes
         /*
          * https://www.algoexpert.io/questions/Validate%20Three%20Nodes
