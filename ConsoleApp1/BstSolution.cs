@@ -48,7 +48,7 @@ namespace AlgoTests
             }
 
             sum1 = tree.value + Math.Max(suml1, sumr1);
-            sum2 = tree.value + suml2 + sumr2;
+            sum2 = Math.Max(suml2,sumr2);
 
         }
         public static void TestMaxPathSum()
