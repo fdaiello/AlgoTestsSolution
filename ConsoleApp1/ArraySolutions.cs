@@ -6,6 +6,93 @@ namespace AlgoTests
 {
     public class ArraySolutions
     {
+        #region ZigZag
+        /*
+         * https://www.algoexpert.io/questions/Zigzag%20Traverse
+         */
+        public static List<int> ZigzagTraverse(List<List<int>> array)
+        {
+            if (array.Count == 0)
+                return new List<int>();
+            else if (array.Count == 1)
+                return array[0];
+
+            List<int> output = new List<int>();
+            int i = 0;
+            int j = 0;
+            bool down = true;
+            int c = 0;
+
+            while ( c < array.Count * array[0].Count )
+            {
+                c++;
+                output.Add(array[i][j]);
+                if ( down)
+                {
+                    if (i == array.Count - 1)
+                    {
+                        down = false;
+                        j++;
+                    }
+                    else if ( j==0)
+                    {
+                        down = false;
+                        i++;
+                    }
+                    else
+                    {
+                        i++;
+                        j--;
+                    }
+                }
+                else
+                {
+                    if (j == array[0].Count - 1)
+                    {
+                        down = true;
+                        i++;
+                    }
+                    else if (i == 0)
+                    {
+                        down = true;
+                        j++;
+                    }
+                    else
+                    {
+                        i--;
+                        j++;
+                    }
+                }
+            }
+
+            return output;
+
+        }
+        public static void TestZigZagTraverse()
+        {
+            List<List<int>> array = new List<List<int>>()
+            {
+               new List<int>() {1,  3,  4, 10},
+               new List<int>() {2,  5,  9, 11},
+               new List<int>() {6,  8, 12, 15},
+               new List<int>() {7, 13, 14, 16}
+            };
+
+            Console.WriteLine(String.Join(",", ZigzagTraverse(array)));
+
+            array = new List<List<int>>() { new List<int> { 1, 2, 3, 4, 5 } };
+            Console.WriteLine(String.Join(",", ZigzagTraverse(array)));
+
+            array = new List<List<int>>() {
+                 new List<int> { 1, 3 },
+                 new List<int> { 2, 4 },
+                 new List<int> { 5, 7 },
+                 new List<int> { 6, 8 },
+                 new List<int> { 9, 10 } };
+            Console.WriteLine(String.Join(",", ZigzagTraverse(array)));
+
+        }
+        #endregion
         #region MinRewards
         /*
          * https://www.algoexpert.io/questions/Min%20Rewards
@@ -765,6 +852,101 @@ namespace AlgoTests
             }
 
             return pMax;
+        }
+        #endregion
+        #region ThreeNumberSum
+        /*
+         * https://www.algoexpert.io/questions/Three%20Number%20Sum
+         */
+        // Brute Force
+        public static List<int[]> ThreeNumberSum1(int[] array, int targetSum)
+        {
+            List<int[]> result = new List<int[]>();
+
+            Array.Sort(array);
+
+            for (int x = 0; x < array.Length - 2; x++)
+            {
+                for (int y = x + 1; y < array.Length - 1; y++)
+                {
+                    for (int z = y + 1; z < array.Length; z++)
+                    {
+                        if (x != y && y != z && z != x && array[x] + array[y] + array[z] == targetSum)
+                        {
+                            int[] line = new int[] { array[x], array[y], array[z] };
+                            result.Add(line);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+        // Optimal
+        public static List<int[]> ThreeNumberSum(int[] array, int targetSum)
+        {
+            Array.Sort(array);
+            List<int[]> result = new List<int[]>();
+
+            for (int i = 0; i < array.Length - 2; i++)
+            {
+                int left = i + 1;
+                int right = array.Length - 1;
+
+                while (left < right)
+                {
+                    if (array[i] + array[left] + array[right] == targetSum)
+                    {
+                        result.Add(new int[] { array[i], array[left], array[right] });
+                        left++;
+                    }
+                    else if (array[i] + array[left] + array[right] < targetSum)
+                    {
+                        left++;
+                    }
+                    else if (array[i] + array[left] + array[right] > targetSum)
+                    {
+                        right--;
+                    }
+                }
+            }
+
+            return result;
+        }
+        #endregion
+        #region ProductSum
+
+        /*
+         *  Product SUM of "special" arrays
+         */
+        public static int ProductSum(List<object> array)
+        {
+            return ProductSumSpecialArray(array, 1);
+        }
+        public static int ProductSumSpecialArray(List<object> array, int depth)
+        {
+            int sum = 0;
+
+            foreach (object element in array)
+            {
+                if (element is int)
+                {
+                    sum += (int)element;
+                }
+                else
+                {
+                    sum += ProductSumSpecialArray((List<object>)element, depth + 1);
+                }
+            }
+
+            return sum * depth;
+        }
+        public static void TestProductSum()
+        {
+            List<object> specialArray = new List<object> { 5, 2, new List<object> { 7, -1 }, 3, new List<object> { 6, new List<object> { -13, 8 }, 4 } };
+
+            Console.WriteLine($"Product sum of special array: result = {ProductSum(specialArray)}");
+
         }
         #endregion
         #region Other
