@@ -7,6 +7,103 @@ namespace AlgoTests
 {
     public static class BstSolution
     {
+        #region ValidateThreeNodes
+        /*
+         * https://www.algoexpert.io/questions/Validate%20Three%20Nodes
+         */
+        public static bool ValidateThreeNodes(BST nodeOne, BST nodeTwo, BST nodeThree)
+        {
+            bool foundOne = false;
+            bool foundThree = false;
+
+            // Traverse NodeTwo and check if eather one or three are descendants
+            Queue<BST> queue = new Queue<BST>();
+            queue.Enqueue(nodeTwo);
+            while (queue.Count > 0)
+            {
+                BST node = queue.Dequeue();
+                if (node.value == nodeOne.value)
+                {
+                    foundOne = true;
+                    break;
+                }
+                else if ( node.value == nodeThree.value)
+                {
+                    foundThree = true;
+                    break;
+                }
+                if (node.left != null)
+                    queue.Enqueue(node.left);
+                if (node.right != null)
+                    queue.Enqueue(node.right);
+            }
+
+            if (foundOne)
+            {
+                // Traverse nodeThree and check if two is descendant
+                Queue<BST> queue3 = new Queue<BST>();
+                queue3.Enqueue(nodeThree);
+                while (queue3.Count > 0)
+                {
+                    BST node = queue3.Dequeue();
+                    if (node.value == nodeTwo.value)
+                        return true;
+                    if (node.left != null)
+                        queue3.Enqueue(node.left);
+                    if (node.right != null)
+                        queue3.Enqueue(node.right);
+                }
+                return false;
+            }
+            else if (foundThree)
+            {
+                // Traverse nodeOne and check if two is descendant
+                Queue<BST> queue1 = new Queue<BST>();
+                queue1.Enqueue(nodeOne);
+                while (queue1.Count > 0)
+                {
+                    BST node = queue1.Dequeue();
+                    if (node.value == nodeTwo.value)
+                        return true;
+                    if (node.left != null)
+                        queue1.Enqueue(node.left);
+                    if (node.right != null)
+                        queue1.Enqueue(node.right);
+                }
+                return false;
+
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+        public static void TestValidateThreeNodes()
+        {
+            BST N5 = new BST(5)
+            { 
+                left=new BST(2)
+                { 
+                    left=new BST(1)
+                    { 
+                        left = new BST(0)
+                    },
+                    right=new BST(4)
+                    {
+                        left=new BST(3)
+                    }
+                },
+                right=new BST(7)
+                { 
+                    left = new BST(6),
+                    right = new BST(8)
+                },
+            };
+
+            Console.WriteLine(ValidateThreeNodes(N5, N5.left, N5.left.right.left));
+        }
+        #endregion
         #region SameBst
         /*
          * https://www.algoexpert.io/questions/Same%20BSTs
