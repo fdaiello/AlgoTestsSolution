@@ -1,11 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace AlgoTests
 {
     public static class BstSolution
     {
+        #region SameBst
+        /*
+         * https://www.algoexpert.io/questions/Same%20BSTs
+         */
+        public static bool SameBsts(List<int> arrayOne, List<int> arrayTwo)
+        {
+            if (arrayOne.Count == 0 && arrayTwo.Count == 0)
+                return true;
+
+            else if (arrayOne[0] != arrayTwo[0] || arrayOne.Count != arrayTwo.Count )
+                return false;
+
+            else
+            {
+                List<int> a1Lowers = new List<int>(arrayOne.GetRange(1, arrayOne.Count - 1).Where(p => p < arrayOne[0]));
+                List<int> a2Lowers = new List<int>(arrayTwo.GetRange(1, arrayTwo.Count - 1).Where(p => p < arrayTwo[0]));
+
+                List<int> a1Greaters = new List<int>(arrayOne.GetRange(1, arrayOne.Count - 1).Where(p => p >= arrayOne[0]));
+                List<int> a2Greaters = new List<int>(arrayTwo.GetRange(1, arrayTwo.Count - 1).Where(p => p >= arrayTwo[0]));
+
+                return SameBsts(a1Lowers, a2Lowers) && SameBsts(a1Greaters, a2Greaters);
+            }
+        }
+        public static void TestSameBsts()
+        {
+            List<int> arrayOne = new List<int>() { 10, 15, 8, 12, 94, 81, 5, 2, 11 };
+            List<int> arrayTwo = new List<int>() { 10, 8, 5, 15, 2, 12, 11, 94, 81 };
+
+            Console.WriteLine(SameBsts(arrayOne, arrayTwo));
+            Console.WriteLine("Expected: true");
+
+
+            arrayOne = new List<int>() { 10, 15, 8, 12, 94, 81, 5, 2, 10 };
+            arrayTwo = new List<int>() { 10, 8, 5, 15, 2, 10, 12, 94, 81 };
+
+            Console.WriteLine(SameBsts(arrayOne, arrayTwo));
+            Console.WriteLine("Expected: false");
+
+        }
+        #endregion
+        #region ReconstructBst
         /*
          * https://www.algoexpert.io/questions/Reconstruct%20BST
          * 
@@ -60,35 +102,8 @@ namespace AlgoTests
             Console.WriteLine(String.Join(",", nList));
             Console.WriteLine("Expected: " + String.Join(",", list));
         }
-
-        public static void TestFindClosestValueInBst()
-        {
-            BST tree = new BST(10)
-            {
-                left = new BST(5)
-                {
-                    left = new BST(2)
-                    {
-                        left = new BST(1)
-                    },
-                    right = new BST(5)
-                },
-                right = new BST(15)
-                {
-                    left = new BST(13)
-                    {
-                        right = new BST(14)
-                    },
-                    right = new BST(22)
-                }
-            };
-
-            int target = 3;
-
-            Console.WriteLine($"Find Closes Value in BST: {BstSolution.FindClosestValueInBst(tree, target)}");
-
-        }
-
+        #endregion
+        #region BranchSum
         /*
          Branch sum
 
@@ -194,7 +209,8 @@ namespace AlgoTests
 
             Console.WriteLine($"Test Branch sums: [{String.Join(",", BranchSums(tree))}]");
         }
-
+        #endregion
+        #region NodeDepths
         /* NODE DEPTHS
          
           The distance between a node in a Binary Tree and the tree's root is called the
@@ -278,7 +294,7 @@ namespace AlgoTests
 
             Console.WriteLine($"Node Depths sum: {NodeDepths(tree)}");
         }
-
+        #endregion
         public static void DEEPFirstSearch_Test1()
         {
             Node node = new Node("A")
@@ -482,6 +498,7 @@ namespace AlgoTests
                 return ValidateBst(node.right, min, node.value) && ValidateBst(node.left, node.value, max);
 
         }
+        #region In_Pre_Post_OrderTraverse
         public static List<int> InOrderTraverse(BST tree, List<int> array)
 		{
 
@@ -522,7 +539,8 @@ namespace AlgoTests
 
 			return array;
 		}
-
+        #endregion
+        #region FindClosestValueInBst
         /*
         Find Closest Value in BST
 
@@ -584,6 +602,33 @@ namespace AlgoTests
                 return closestValue;
 
         }
+        public static void TestFindClosestValueInBst()
+        {
+            BST tree = new BST(10)
+            {
+                left = new BST(5)
+                {
+                    left = new BST(2)
+                    {
+                        left = new BST(1)
+                    },
+                    right = new BST(5)
+                },
+                right = new BST(15)
+                {
+                    left = new BST(13)
+                    {
+                        right = new BST(14)
+                    },
+                    right = new BST(22)
+                }
+            };
 
+            int target = 3;
+
+            Console.WriteLine($"Find Closes Value in BST: {BstSolution.FindClosestValueInBst(tree, target)}");
+
+        }
+        #endregion
     }
 }
