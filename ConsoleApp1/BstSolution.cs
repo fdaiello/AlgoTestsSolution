@@ -7,38 +7,23 @@ namespace AlgoTests
 {
     public static class BstSolution
     {
+        
         #region maxPathSum
         /*
          * https://www.algoexpert.io/questions/Max%20Path%20Sum%20In%20Binary%20Tree
          */
+
+        // This Version Didn't Work --- Sorry :-(
         public static int MaxPathSum(BinaryTree tree)
         {
-            int suml1 = 0;
-            int suml2 = 0;
-            int sumr1 = 0;
-            int sumr2 = 0;
+            int suml1 = short.MinValue;
+            int sumr1 = short.MinValue;
+
+            int suml2 = short.MinValue;
+            int sumr2 = short.MinValue;
+
 
             if (tree.left != null)
-            {
-                MaxPathSum2(tree.left, ref suml1, ref suml2);
-            }
-            if (tree.right != null)
-            {
-                MaxPathSum2(tree.left, ref sumr1, ref sumr2);
-            }
-
-
-            return Math.Max(sumr2,Math.Max(suml2,tree.value+suml1+sumr1));
-
-        }
-        public static void MaxPathSum2(BinaryTree tree, ref int sum1, ref int sum2)
-        {
-            int suml1 = 0;
-            int suml2 = 0;
-            int sumr1 = 0;
-            int sumr2 = 0;
-
-            if (tree.left != null )
             {
                 MaxPathSum2(tree.left, ref suml1, ref suml2);
             }
@@ -47,8 +32,35 @@ namespace AlgoTests
                 MaxPathSum2(tree.right, ref sumr1, ref sumr2);
             }
 
-            sum1 = tree.value + Math.Max(suml1, sumr1);
-            sum2 = Math.Max(suml2,sumr2);
+            int nodeMax = Math.Max(sumr1, Math.Max(suml1, Math.Max(tree.value, Math.Max(tree.value + suml1, tree.value + sumr1))));
+            int nodeCicleMax = Math.Max(nodeMax, tree.value + suml1 + sumr1);
+
+            return Math.Max(nodeCicleMax, Math.Max(suml2, sumr2));
+
+        }
+        public static void MaxPathSum2(BinaryTree tree, ref int sum1, ref int sum2)
+        {
+            int suml1 = short.MinValue;
+            int sumr1 = short.MinValue;
+
+            int suml2 = short.MinValue;
+            int sumr2 = short.MinValue;
+
+            if (tree.left != null )
+            {
+                MaxPathSum2(tree.left, ref suml1, ref suml2);
+            }
+
+            if (tree.right != null)
+            {
+                MaxPathSum2(tree.right, ref sumr1, ref sumr2);
+            }
+
+            int nodeMax = Math.Max(sumr1,Math.Max(suml1,Math.Max(tree.value,Math.Max(tree.value+suml1,tree.value+sumr1))));
+            int nodeCicleMax = Math.Max(nodeMax, tree.value + suml1 + sumr1);
+
+            sum1 = nodeMax;
+            sum2 = Math.Max(nodeCicleMax, Math.Max(suml2,sumr2));
 
         }
         public static void TestMaxPathSum()
@@ -60,23 +72,40 @@ namespace AlgoTests
                 {
                     left = new BinaryTree(4)
                     {
-                        left = new BinaryTree(8)
+                        left = new BinaryTree(30)
                         {
                             right = new BinaryTree(10)
                         },
-                        right = new BinaryTree(9) 
+                        right = new BinaryTree(30)
                     },
                     right = new BinaryTree(5)
                 },
                 right = new BinaryTree(3)
                 {
                     left = new BinaryTree(6),
-                    right = new BinaryTree(7),
+                    //right = new BinaryTree(7),
                 }
             };
 
             Console.WriteLine(MaxPathSum(tree));
             Console.WriteLine("Expected: 25");
+
+            tree = new BinaryTree(1)
+            {
+                right = new BinaryTree(-1),
+                left = new BinaryTree(2)
+            };
+
+            Console.WriteLine(MaxPathSum(tree));
+            Console.WriteLine("Expected: 3");
+
+            tree = new BinaryTree(-2)
+            {
+                right = new BinaryTree(-1)
+            };
+
+            Console.WriteLine(MaxPathSum(tree));
+            Console.WriteLine("Expected: -1");
 
         }
         #endregion
@@ -465,126 +494,7 @@ namespace AlgoTests
             Console.WriteLine($"Node Depths sum: {NodeDepths(tree)}");
         }
         #endregion
-        public static void DEEPFirstSearch_Test1()
-        {
-            Node node = new Node("A")
-            {
-                children = {
-                    new Node ("B")
-                {
-                        children =
-                        {
-                            new Node ("E"),
-                            new Node ("F")
-                            {
-                                children =
-                                {
-                                    new Node ("I"),
-                                    new Node ("J")
-                                }
-                            }
-                        }
-                },
-                    new Node ("C"),
-                    new Node ("D")
-                    {
-                        children =
-                        {
-                            new Node ("G")
-                            {
-                                children = { new Node("K") }
-                            },
-                            new Node ("H")
-                        }
-                    }
-                }
-            };
-
-            List<string> stringList = new List<string>();
-            stringList = node.DepthFirstSearch(stringList);
-
-            Console.WriteLine(String.Join(",", stringList));
-        }
-
-
-        static void TestFindKthLargestValueInBst1()
-        {
-            List<int> arr = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-
-            BST tree = BstSolution.MinHeightBst(arr);
-
-            int k = 5;
-            Console.WriteLine(BstSolution.FindKthLargestValueInBst1(tree, ref k));
-
-        }
-        static void TestMinHeightBST()
-        {
-            List<int> arr = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-
-            BST tree = BstSolution.MinHeightBst(arr);
-
-            List<int> arr2 = new List<int>();
-
-            Console.WriteLine(String.Join(",", BstSolution.InOrderTraverse(tree, arr2)));
-
-        }
-        static void TestValidateBST()
-        {
-            BST bst = new BST(10)
-            {
-                left = new BST(5)
-                {
-                    left = new BST(2)
-                    {
-                        left = new BST(1)
-                    },
-                    right = new BST(9)
-                },
-                right = new BST(15)
-                {
-                    right = new BST(22),
-                    left = new BST(9)
-                }
-            };
-
-            Console.WriteLine(BstSolution.ValidateBst(bst));
-            Console.WriteLine("Expected: False");
-
-        }
-        static void TestBSTTraversal()
-        {
-            BST bst = new BST(10)
-            {
-                left = new BST(5)
-                {
-                    left = new BST(2)
-                    {
-                        left = new BST(1)
-                    },
-                    right = new BST(5)
-                },
-                right = new BST(15)
-                {
-                    right = new BST(22)
-                }
-            };
-
-            List<int> arr;
-
-            arr = new List<int>();
-            Console.WriteLine("In Order");
-            Console.WriteLine(String.Join(",", BstSolution.InOrderTraverse(bst, arr)));
-
-            arr = new List<int>();
-            Console.WriteLine("Pre Order");
-            Console.WriteLine(String.Join(",", BstSolution.PreOrderTraverse(bst, arr)));
-
-            arr = new List<int>();
-            Console.WriteLine("Pos Order");
-            Console.WriteLine(String.Join(",", BstSolution.PostOrderTraverse(bst, arr)));
-
-        }
-
+        #region FindKthLargestValueInBst
         /*
          *  https://www.algoexpert.io/questions/Find%20Kth%20Largest%20Value%20In%20BST
          */
@@ -621,6 +531,19 @@ namespace AlgoTests
             return 0;
     
         }
+        static void TestFindKthLargestValueInBst1()
+        {
+            List<int> arr = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+            BST tree = BstSolution.MinHeightBst(arr);
+
+            int k = 5;
+            Console.WriteLine(BstSolution.FindKthLargestValueInBst1(tree, ref k));
+
+        }
+
+        #endregion
+        #region MinHeightBst
         /*
          * https://www.algoexpert.io/questions/Min%20Height%20BST
          * 
@@ -650,6 +573,19 @@ namespace AlgoTests
             }
 
         }
+        static void TestMinHeightBST()
+        {
+            List<int> arr = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+            BST tree = BstSolution.MinHeightBst(arr);
+
+            List<int> arr2 = new List<int>();
+
+            Console.WriteLine(String.Join(",", BstSolution.InOrderTraverse(tree, arr2)));
+
+        }
+        #endregion
+        #region ValidateBst
         public static bool ValidateBst(BST tree)
         {
             return ValidateBst(tree, int.MaxValue, int.MinValue);
@@ -668,6 +604,31 @@ namespace AlgoTests
                 return ValidateBst(node.right, min, node.value) && ValidateBst(node.left, node.value, max);
 
         }
+        static void TestValidateBST()
+        {
+            BST bst = new BST(10)
+            {
+                left = new BST(5)
+                {
+                    left = new BST(2)
+                    {
+                        left = new BST(1)
+                    },
+                    right = new BST(9)
+                },
+                right = new BST(15)
+                {
+                    right = new BST(22),
+                    left = new BST(9)
+                }
+            };
+
+            Console.WriteLine(BstSolution.ValidateBst(bst));
+            Console.WriteLine("Expected: False");
+
+        }
+
+        #endregion
         #region In_Pre_Post_OrderTraverse
         public static List<int> InOrderTraverse(BST tree, List<int> array)
 		{
@@ -800,5 +761,205 @@ namespace AlgoTests
 
         }
         #endregion
+        #region Other
+        public static void DEEPFirstSearch_Test1()
+        {
+            Node node = new Node("A")
+            {
+                children = {
+                    new Node ("B")
+                {
+                        children =
+                        {
+                            new Node ("E"),
+                            new Node ("F")
+                            {
+                                children =
+                                {
+                                    new Node ("I"),
+                                    new Node ("J")
+                                }
+                            }
+                        }
+                },
+                    new Node ("C"),
+                    new Node ("D")
+                    {
+                        children =
+                        {
+                            new Node ("G")
+                            {
+                                children = { new Node("K") }
+                            },
+                            new Node ("H")
+                        }
+                    }
+                }
+            };
+
+            List<string> stringList = new List<string>();
+            stringList = node.DepthFirstSearch(stringList);
+
+            Console.WriteLine(String.Join(",", stringList));
+        }
+        static void TestBSTTraversal()
+        {
+            BST bst = new BST(10)
+            {
+                left = new BST(5)
+                {
+                    left = new BST(2)
+                    {
+                        left = new BST(1)
+                    },
+                    right = new BST(5)
+                },
+                right = new BST(15)
+                {
+                    right = new BST(22)
+                }
+            };
+
+            List<int> arr;
+
+            arr = new List<int>();
+            Console.WriteLine("In Order");
+            Console.WriteLine(String.Join(",", BstSolution.InOrderTraverse(bst, arr)));
+
+            arr = new List<int>();
+            Console.WriteLine("Pre Order");
+            Console.WriteLine(String.Join(",", BstSolution.PreOrderTraverse(bst, arr)));
+
+            arr = new List<int>();
+            Console.WriteLine("Pos Order");
+            Console.WriteLine(String.Join(",", BstSolution.PostOrderTraverse(bst, arr)));
+
+        }
+
+
+        #endregion
+    }
+
+    public class BST
+    {
+        public int value;
+        public BST left;
+        public BST right;
+
+        public BST(int value)
+        {
+            this.value = value;
+        }
+
+        public BST Insert(int value)
+        {
+            if (value < this.value)
+            {
+                if (this.left == null)
+                {
+                    this.left = new BST(value);
+                }
+                else
+                {
+                    this.left.Insert(value);
+                }
+            }
+            else
+            {
+                if (this.right == null)
+                {
+                    this.right = new BST(value);
+                }
+                else
+                {
+                    this.right.Insert(value);
+                }
+            }
+            return this;
+        }
+
+        public bool Contains(int value)
+        {
+            if (this.value == value)
+            {
+                return true;
+            }
+            else if (value < this.value && this.left != null)
+            {
+                return this.left.Contains(value);
+            }
+            else if (this.right != null)
+            {
+                return this.right.Contains(value);
+            }
+
+            return false;
+        }
+
+        public BST RemoveChild(int value)
+        {
+            if (this.value == value)
+            {
+                if (this.right != null)
+                {
+                    int minValue = this.right.MinValue();
+                    this.right = this.right.RemoveChild(minValue);
+                    this.value = minValue;
+                }
+                else if (this.left != null)
+                {
+                    int maxValue = this.left.MaxValue();
+                    this.left = this.left.RemoveChild(maxValue);
+                    this.value = maxValue;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else if (value < this.value)
+            {
+                this.left = this.left.RemoveChild(value);
+            }
+            else
+            {
+                this.right = this.right.RemoveChild(value);
+            }
+            return this;
+        }
+        public BST Remove(int value)
+        {
+            if (this.left == null && this.right == null)
+            {
+                return this;
+            }
+            else
+            {
+                return this.RemoveChild(value);
+            }
+        }
+        private int MinValue()
+        {
+            if (this.left != null)
+            {
+                return this.left.MinValue();
+            }
+            else
+            {
+                return this.value;
+            }
+        }
+        private int MaxValue()
+        {
+            if (this.right != null)
+            {
+                return this.right.MaxValue();
+            }
+            else
+            {
+                return this.value;
+            }
+        }
+
     }
 }
