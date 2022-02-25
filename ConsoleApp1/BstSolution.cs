@@ -12,7 +12,30 @@ namespace AlgoTests
         /*
          * https://www.algoexpert.io/questions/Max%20Path%20Sum%20In%20Binary%20Tree
          */
+        // Champion Version !!!! :-)
         public static int MaxPathSum(BinaryTree tree)
+        {
+            List<int> values = GetMaxPathSum(tree);
+            return values.Max();
+
+        }
+        public static List<int> GetMaxPathSum(BinaryTree tree)
+        {
+            if (tree == null)
+                return new List<int>() { short.MinValue, short.MinValue };
+
+
+            List<int> leftValues = GetMaxPathSum(tree.left);
+            List<int> rightValues = GetMaxPathSum(tree.right);
+
+
+            int maxAsBranch = Math.Max(Math.Max(tree.value, tree.value + leftValues[0]), tree.value + rightValues[0]);
+            int maxAsT = Math.Max(Math.Max(Math.Max(maxAsBranch, leftValues[1]), rightValues[1]), tree.value + rightValues[0] + leftValues[0]);
+
+            return new List<int>() { maxAsBranch, maxAsT };
+        }
+
+        public static int MaxPathSum1(BinaryTree tree)
         {
             int maxLeftBranch = short.MinValue;
             int maxRightBranch = short.MinValue;
@@ -105,11 +128,11 @@ namespace AlgoTests
             int max1 = int.MinValue;
             int max2 = 0;
 
-            MaxPathSumR(tree, ref max1, ref max2);
+            MaxPathSumB(tree, ref max1, ref max2);
 
             return max1;
         }
-        public static void MaxPathSumR(BinaryTree tree, ref int max1, ref int max2)
+        public static void MaxPathSumB(BinaryTree tree, ref int max1, ref int max2)
         {
             max2 += tree.value;
 
@@ -119,10 +142,10 @@ namespace AlgoTests
                 max2 = 0;
 
             if (tree.left != null)
-                MaxPathSumR(tree.left, ref max1, ref max2);
+                MaxPathSumB(tree.left, ref max1, ref max2);
 
             if (tree.right != null)
-                MaxPathSumR(tree.right, ref max1, ref max2);
+                MaxPathSumB(tree.right, ref max1, ref max2);
 
             max2 -= tree.value;
         }
