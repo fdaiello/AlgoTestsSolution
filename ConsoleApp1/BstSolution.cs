@@ -7,88 +7,79 @@ namespace AlgoTests
 {
     public static class BstSolution
     {
-        
+
         #region maxPathSum
         /*
          * https://www.algoexpert.io/questions/Max%20Path%20Sum%20In%20Binary%20Tree
          */
-
-        // This Version Didn't Work --- Sorry :-(
         public static int MaxPathSum(BinaryTree tree)
         {
-            int suml1 = short.MinValue;
-            int sumr1 = short.MinValue;
+            int maxLeftBranch = short.MinValue;
+            int maxRightBranch = short.MinValue;
 
-            int suml2 = short.MinValue;
-            int sumr2 = short.MinValue;
-
+            int maxLeftT = short.MinValue;
+            int maxRightT = short.MinValue;
 
             if (tree.left != null)
             {
-                MaxPathSum2(tree.left, ref suml1, ref suml2);
+                MaxPathSum2(tree.left, ref maxLeftBranch, ref maxLeftT);
             }
             if (tree.right != null)
             {
-                MaxPathSum2(tree.right, ref sumr1, ref sumr2);
+                MaxPathSum2(tree.right, ref maxRightBranch, ref maxRightT);
             }
 
-            int nodeMax = Math.Max(sumr1, Math.Max(suml1, Math.Max(tree.value, Math.Max(tree.value + suml1, tree.value + sumr1))));
-            int nodeCicleMax = Math.Max(nodeMax, tree.value + suml1 + sumr1);
-
-            return Math.Max(nodeCicleMax, Math.Max(suml2, sumr2));
+            return Math.Max(Math.Max(Math.Max(Math.Max(Math.Max(tree.value, tree.value + maxLeftBranch),tree.value + maxRightBranch),maxLeftT),maxRightT),tree.value+maxLeftBranch+maxRightBranch);
 
         }
-        public static void MaxPathSum2(BinaryTree tree, ref int sum1, ref int sum2)
+        public static void MaxPathSum2(BinaryTree tree, ref int maxAsBranch, ref int maxAsT)
         {
-            int suml1 = short.MinValue;
-            int sumr1 = short.MinValue;
+            int maxLeftBranch = short.MinValue;
+            int maxRightBranch = short.MinValue;
 
-            int suml2 = short.MinValue;
-            int sumr2 = short.MinValue;
+            int maxLeftT = short.MinValue;
+            int maxRightT = short.MinValue;
 
             if (tree.left != null )
             {
-                MaxPathSum2(tree.left, ref suml1, ref suml2);
+                MaxPathSum2(tree.left, ref maxLeftBranch, ref maxLeftT);
             }
 
             if (tree.right != null)
             {
-                MaxPathSum2(tree.right, ref sumr1, ref sumr2);
+                MaxPathSum2(tree.right, ref maxRightBranch, ref maxRightT);
             }
 
-            int nodeMax = Math.Max(sumr1,Math.Max(suml1,Math.Max(tree.value,Math.Max(tree.value+suml1,tree.value+sumr1))));
-            int nodeCicleMax = Math.Max(nodeMax, tree.value + suml1 + sumr1);
+            maxAsBranch = Math.Max(Math.Max(tree.value,tree.value+maxLeftBranch),tree.value+maxRightBranch);
 
-            sum1 = nodeMax;
-            sum2 = Math.Max(nodeCicleMax, Math.Max(suml2,sumr2));
+            maxAsT = Math.Max(Math.Max(Math.Max(maxAsBranch,maxLeftT),maxRightT),tree.value+maxRightBranch+maxLeftBranch);
 
         }
         public static void TestMaxPathSum()
         {
-            BinaryTree tree = new BinaryTree(1)
+            BinaryTree tree = new BinaryTree(3)
             {
-                value = 1,
                 left = new BinaryTree(2)
                 {
                     left = new BinaryTree(4)
                     {
                         left = new BinaryTree(30)
                         {
-                            right = new BinaryTree(10)
+                            right = new BinaryTree(8)
                         },
                         right = new BinaryTree(30)
                     },
                     right = new BinaryTree(5)
                 },
-                right = new BinaryTree(3)
+                right = new BinaryTree(1)
                 {
-                    left = new BinaryTree(6),
-                    //right = new BinaryTree(7),
+                    left = new BinaryTree(2),
+                    right = new BinaryTree(2)
                 }
             };
 
             Console.WriteLine(MaxPathSum(tree));
-            Console.WriteLine("Expected: 25");
+            Console.WriteLine("Expected: 72");
 
             tree = new BinaryTree(1)
             {
@@ -108,6 +99,34 @@ namespace AlgoTests
             Console.WriteLine("Expected: -1");
 
         }
+        // This version Can't sum branches, just sum at depth - Doesn't sove the problem!
+        public static int MaxPathSumA(BinaryTree tree)
+        {
+            int max1 = int.MinValue;
+            int max2 = 0;
+
+            MaxPathSumR(tree, ref max1, ref max2);
+
+            return max1;
+        }
+        public static void MaxPathSumR(BinaryTree tree, ref int max1, ref int max2)
+        {
+            max2 += tree.value;
+
+            if (max2 > max1)
+                max1 = max2;
+            if (max2 < 0)
+                max2 = 0;
+
+            if (tree.left != null)
+                MaxPathSumR(tree.left, ref max1, ref max2);
+
+            if (tree.right != null)
+                MaxPathSumR(tree.right, ref max1, ref max2);
+
+            max2 -= tree.value;
+        }
+
         #endregion
         #region ValidateThreeNodes
         /*
