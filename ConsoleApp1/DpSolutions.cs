@@ -6,6 +6,80 @@ namespace AlgoTests
 {
     public class DpSolutions
     {
+		#region NumbersInPi
+		/*
+		 * https://www.algoexpert.io/questions/Numbers%20In%20Pi
+		 */
+		public static int NumbersInPi(string pi, string[] numbers)
+		{
+			// Create a hash with numbers
+			HashSet<String> favoriteNumbers = new HashSet<string>();
+			foreach ( string number in numbers)
+				favoriteNumbers.Add(number);
+
+			// Create map with prefixes and minimum number of spaces found for each prefix
+			Dictionary<string, int> prefixMap = new Dictionary<string, int>();
+
+			// Call the method that will check the prefix
+			CheckMinSpacePrefix(pi, favoriteNumbers, prefixMap);
+
+			// Return what was computed to pi
+			return prefixMap[pi]>short.MaxValue ? -1 : prefixMap[pi];
+
+		}
+		public static void CheckMinSpacePrefix(string prefix, HashSet<string> favoriteNumbers, Dictionary<string,int> prefixMap)
+        {
+			bool found = false;
+
+			// Iterate thru prefix
+			for ( int i =1; i<=prefix.Length; i++)
+            {
+				// Check if prefix is found at favorite numbers
+				string subPrefix = prefix.Substring(0, i);
+				if (favoriteNumbers.Contains(subPrefix))
+                {
+					found = true;
+					int minSpaces;
+
+					// found whole prefix?
+					if (subPrefix.Length==prefix.Length)
+                    {
+						minSpaces=0;
+                    }
+					else
+                    {
+						string sufix = prefix.Substring(i);
+						CheckMinSpacePrefix(sufix, favoriteNumbers, prefixMap);
+						minSpaces = 1 + prefixMap[sufix];
+					}
+
+					// Save 
+					if (prefixMap.ContainsKey(prefix))
+						prefixMap[prefix] = Math.Min(prefixMap[prefix], minSpaces);
+                    else
+						prefixMap.Add(prefix, minSpaces);
+                }
+            }
+
+			if (!found)
+				prefixMap.Add(prefix, short.MaxValue);
+
+        }
+		public static void TestNumbersInPi()
+        {
+			string pi = "3141592653589793238462643383279";
+			string[] numbers = new string[] { "314159265358979323846", "26433", "8", "3279", "314159265", "35897932384626433832", "79" };
+			Console.WriteLine(NumbersInPi(pi, numbers));
+			Console.WriteLine("Expected: 2");
+
+
+			numbers = new string[] { "3141", "1512", "159", "793", "12412451", "8462643383279" };
+			pi = "3141592653589793238462643383279";
+			Console.WriteLine(NumbersInPi(pi, numbers));
+			Console.WriteLine("Expected: -1");
+
+		}
+		#endregion
 		#region DiskStacking
 		/*
 		 * https://www.algoexpert.io/questions/Disk%20Stacking
