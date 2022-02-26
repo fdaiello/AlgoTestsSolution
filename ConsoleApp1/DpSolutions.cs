@@ -6,6 +6,65 @@ namespace AlgoTests
 {
     public class DpSolutions
     {
+		#region MaximumSubSubMatrix
+		/*
+		 * https://www.algoexpert.io/questions/Maximum%20Sum%20Submatrix
+		 */
+		public static int MaximumSumSubmatrix(int[,] matrix, int size)
+		{
+			// Create a prefix sum matrix
+			int[,] prefixSum = new int[matrix.GetLength(0), matrix.GetLength(1)];
+
+			// Init first row and col
+			prefixSum[0, 0] = matrix[0, 0];
+			for ( int i = 1; i < matrix.GetLength(0); i++)
+            {
+				prefixSum[i, 0] = matrix[i, 0] + prefixSum[i - 1, 0];
+            }
+			for ( int i = 1; i < matrix.GetLength(1); i++)
+            {
+				prefixSum[0, i] = matrix[0, i] + prefixSum[0, i - 1];
+            }
+			// Now fill all other cells
+			for ( int i = 1; i<matrix.GetLength(0); i++)
+            {
+				for ( int j = 1; j<matrix.GetLength(1); j++)
+                {
+					prefixSum[i, j] = prefixSum[i - 1, j] + prefixSum[i, j - 1] - prefixSum[i - 1, j - 1] + matrix[i,j];
+                }
+            }
+
+			// Now get the max sum for given size
+			int maxSum = int.MinValue;
+
+			for ( int i=size-1; i<matrix.GetLength(0); i++)
+            {
+				for ( int j=size-1; j < matrix.GetLength(1); j++)
+                {
+					int thisSum = prefixSum[i, j];
+					if (i - size >= 0)
+						thisSum -= prefixSum[i - size,j];
+					if (j - size >= 0)
+						thisSum -= prefixSum[i, j - size];
+					if (i - size >= 0 && j - size >= 0)
+						thisSum += prefixSum[i - size, j - size];
+
+					if (thisSum > maxSum)
+						maxSum = thisSum;
+                }
+            }
+
+			return maxSum;
+		}
+		public static void TestMaxSumSubMastrix()
+        {
+			int[,] matrix = new int[,] { { 2, 4 }, { 5, 6 }, { -3, 2 } };
+			int size = 2;
+
+			Console.WriteLine(MaximumSumSubmatrix(matrix, size));
+			Console.WriteLine("Expected: 17");
+        }
+		#endregion
 		#region NumbersInPi
 		/*
 		 * https://www.algoexpert.io/questions/Numbers%20In%20Pi
