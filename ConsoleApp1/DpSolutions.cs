@@ -6,6 +6,65 @@ namespace AlgoTests
 {
     public class DpSolutions
     {
+		#region DiskStacking
+		/*
+		 * https://www.algoexpert.io/questions/Disk%20Stacking
+		 * 
+		 *  int[] disk: [width, depth, height]
+		 */
+		public static List<int[]> DiskStacking(List<int[]> disks)
+		{
+			// Sort list by disks width - firt array dimension
+			disks.Sort((x,y)=>x[0].CompareTo(y[0]));
+
+			// Store max height and maxStack achieved
+			int maxHeight = int.MinValue;
+			List<int[]> maxStack = new List<int[]>();
+
+			// Test starting with each disk - from smaller to greater
+			for ( int i=0; i<disks.Count; i++)
+            {
+				int thisHeight = 0;
+				List<int[]> thisStack = new List<int[]>();
+
+				thisHeight += disks[i][2];
+				thisStack.Add(disks[i]);
+
+				// Tests all other disks that can stack
+				for ( int j = i+1; j<disks.Count; j++)
+                {
+					if (disks[j][0] > thisStack[thisStack.Count-1][0] && disks[j][1] > thisStack[thisStack.Count - 1][1] && disks[j][2] > thisStack[thisStack.Count - 1][2])
+					{
+						thisHeight += disks[j][2];
+						thisStack.Add(disks[j]);
+					}
+				}
+
+				// Have we found a higher stack?
+				if ( thisHeight > maxHeight)
+                {
+					maxHeight = thisHeight;
+					maxStack = thisStack;
+                }
+            }
+
+			return maxStack;
+		}
+		public static void TestDiskStacking()
+        {
+			List<int[]> disks = new List<int[]>() {
+				new int[]{ 2, 1, 2 },
+				new int[]{ 3, 2, 3 },
+				new int[]{ 2, 2, 8 },
+				new int[]{ 2, 3, 4 },
+				new int[]{ 1, 3, 1 },
+				new int[]{ 4, 4, 5 }
+			};
+
+			Console.WriteLine("[" + String.Join(",", DiskStacking(disks).Select(p => "[" + string.Join(", ", p) + "]")) + "]");
+			Console.WriteLine("Expected: [[2, 1, 2], [3, 2, 3], [4, 4, 5]]");
+        }
+		#endregion
 		#region KnapSackProblem
 		/*
 		 *  https://www.algoexpert.io/questions/Knapsack%20Problem
