@@ -9,7 +9,12 @@ namespace AlgoTests
         #region DijkstraAlgorithm
         /*
          * https://www.algoexpert.io/questions/Dijkstra's%20Algorithm
+         * 
+         * 
+         *   This is NOT DijkstrasAlgorithm. I have built this solution by myself, before reading about Dijkstras Algorithm, 
+         *   and I found it to be much easier and with less code!!!
          */
+
         public static int[] DijkstrasAlgorithm(int start, int[][][] edges)
         {
             // Empty edges case
@@ -38,6 +43,7 @@ namespace AlgoTests
 
                 foreach (int[] edge in edges[nodeNumber]) 
                 {
+                    // Check if we have not visited this node yet, or if we have a shorter distance now.
                     if ( distances[edge[0]] ==-1 || distances[edge[0]] > distanceToThisNode + edge[1])
                     {
                         distances[edge[0]] = distanceToThisNode + edge[1];

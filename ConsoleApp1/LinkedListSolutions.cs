@@ -6,6 +6,73 @@ namespace AlgoTests
 {
     class LinkedListSolutions
     {
+		#region FindTheLoop
+		/*
+		 * https://www.algoexpert.io/questions/Find%20Loop
+		 */
+		public static LinkedList FindLoop(LinkedList head)
+		{
+			if (head == null || head.next==null)
+				return head;
+
+			LinkedList p1 = head.next;
+			LinkedList p2 = head.next.next;
+
+			while ( p1 != p2)
+            {
+				p1 = p1.next;
+				p2 = p2.next.next;
+            }
+
+			p1 = head;
+
+			while (p1 != p2)
+            {
+				p1 = p1.next;
+				p2 = p2.next;
+            }
+
+			return p1;
+		}
+
+		// The following solution does NOT respect the Space Complexity stated of O(1)
+		public static LinkedList FindLoop0(LinkedList head)
+		{
+			if (head == null)
+				return head;
+
+			HashSet<LinkedList> visited = new HashSet<LinkedList>();
+
+			while ( head != null )
+            {
+				if (visited.Contains(head))
+					return head;
+
+				visited.Add(head);
+				head = head.next;
+            }
+
+			return head;
+		}
+		public static void TestFindTheLoop()
+        {
+			LinkedList p1 = new LinkedList(0);
+			LinkedList head = p1;
+			LinkedList pLoop = null;
+			for ( int i =1; i<10; i++)
+            {
+				LinkedList p2 = new LinkedList(i);
+				p1.next = p2;
+				p1 = p2;
+				if (i == 4)
+					pLoop = p2;
+            }
+			p1.next = pLoop;
+
+			Console.WriteLine(FindLoop(head).value);
+			Console.WriteLine("Expected: 4");
+        }
+		#endregion
 		#region SumOfLinkedList
 		/*
 		 * https://www.algoexpert.io/questions/Sum%20of%20Linked%20Lists
