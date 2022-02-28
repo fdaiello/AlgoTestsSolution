@@ -6,6 +6,42 @@ namespace AlgoTests
 {
     public class DpSolutions
     {
+		#region MaximizeExpression
+		/*
+		 * https://www.algoexpert.io/questions/Maximize%20Expression
+		 */
+		public static int MaximizeExpression(int[] array)
+		{
+
+			if (array.Length < 4)
+				return 0;
+
+			int[,] m = new int[4, array.Length];
+			m[0, 0] = array[0];
+			m[1, 0] = int.MinValue;
+			m[2, 1] = int.MinValue;
+			m[3, 2] = int.MinValue;
+
+			for ( int i=1; i<array.Length; i++)
+            {
+				m[0, i] = Math.Max(m[0, i - 1], array[i]);
+				m[1, i] = Math.Max(m[1, i - 1], m[0, i - 1] - array[i]);
+				if (i > 1)
+					m[2, i] = Math.Max(m[2, i - 1], m[1, i - 1] + array[i]);
+				if (i > 2)
+					m[3, i] = Math.Max(m[3, i - 1], m[2, i - 1] - array[i]);
+			}
+
+			return m[3, array.Length-1];
+
+		}
+		public static void TestMaximizeExpression()
+        {
+			int[] array = new int[] { 3, 6, 1, -3, 2, 7 };
+			Console.WriteLine(MaximizeExpression(array));
+			Console.WriteLine("Expected: 4");
+        }
+		#endregion
 		#region MaximumSubSubMatrix
 		/*
 		 * https://www.algoexpert.io/questions/Maximum%20Sum%20Submatrix
