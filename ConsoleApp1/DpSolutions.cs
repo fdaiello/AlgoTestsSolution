@@ -702,8 +702,10 @@ namespace AlgoTests
 
 			// Memo array f, from 0 to n.
 			int[] f = new int[n + 1];
+
 			// Init f[0] with 0 ( zero coins to make change for zero ).
 			f[0] = 0;
+
 			// All other should be set to infinite ( infinite zero coins - will be resseted as the algo runs )
 			// BE CAREFULL with MaxValue. Int32.MaxValue + 1 result negative integer!!!!!
 			for (int i = 1; i <= n; i++)
@@ -782,7 +784,7 @@ namespace AlgoTests
 					// Check if coin is lower or equal denomination
 					if ( coin <= a )
                     {
-						// Add this possibility to memo array - one possibility ( with this coin ) plus all possibilities already computed for this amount subtractin this coin
+						// Add this possibility to memo array - one possibility ( with this coin ) plus all possibilities already computed for this amount subtracting this coin
 						f[a] += f[a - coin];
 					}
                 }

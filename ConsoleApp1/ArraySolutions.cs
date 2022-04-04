@@ -571,6 +571,19 @@ namespace AlgoTests
 		 */
         public static int[] TwoNumberSum(int[] array, int targetSum)
         {
+            var map = new HashSet<int>();
+            for ( int i=0; i<array.Length; i++) 
+            {
+                if (map.Contains(targetSum - array[i]))
+                    return new int[2] { array[i], targetSum - array[i] };
+                else
+                    map.Add(array[i]);
+            }
+
+            return new int[0];
+        }
+        public static int[] TwoNumberSum0(int[] array, int targetSum)
+        {
             for (int x = 0; x < array.Length; x++)
             {
                 for (int y = 0; y < array.Length; y++)
@@ -590,6 +603,7 @@ namespace AlgoTests
             int[] array = { 3, 5, -4, 8, 11, 1, -1, 6 };
             int sum = 10;
             Console.WriteLine($"TwoNumberSum: [{String.Join(",", TwoNumberSum(array, sum))}]");
+            Console.WriteLine("Expected: 11, -1");
 
         }
         #endregion
