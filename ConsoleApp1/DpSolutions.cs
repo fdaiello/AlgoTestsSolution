@@ -6,6 +6,234 @@ namespace AlgoTests
 {
     public class DpSolutions
     {
+		#region MaximizeExpression
+		/*
+		 * https://www.algoexpert.io/questions/Maximize%20Expression
+		 */
+		public static int MaximizeExpression(int[] array)
+		{
+
+			if (array.Length < 4)
+				return 0;
+
+			int[,] m = new int[4, array.Length];
+			m[0, 0] = array[0];
+			m[1, 0] = int.MinValue;
+			m[2, 1] = int.MinValue;
+			m[3, 2] = int.MinValue;
+
+			for ( int i=1; i<array.Length; i++)
+            {
+				m[0, i] = Math.Max(m[0, i - 1], array[i]);
+				m[1, i] = Math.Max(m[1, i - 1], m[0, i - 1] - array[i]);
+				if (i > 1)
+					m[2, i] = Math.Max(m[2, i - 1], m[1, i - 1] + array[i]);
+				if (i > 2)
+					m[3, i] = Math.Max(m[3, i - 1], m[2, i - 1] - array[i]);
+			}
+
+			return m[3, array.Length-1];
+
+		}
+		public static void TestMaximizeExpression()
+        {
+			int[] array = new int[] { 3, 6, 1, -3, 2, 7 };
+			Console.WriteLine(MaximizeExpression(array));
+			Console.WriteLine("Expected: 4");
+        }
+		#endregion
+		#region MaximumSubSubMatrix
+		/*
+		 * https://www.algoexpert.io/questions/Maximum%20Sum%20Submatrix
+		 */
+		public static int MaximumSumSubmatrix(int[,] matrix, int size)
+		{
+			// Create a prefix sum matrix
+			int[,] prefixSum = new int[matrix.GetLength(0), matrix.GetLength(1)];
+
+			// Init first row and col
+			prefixSum[0, 0] = matrix[0, 0];
+			for ( int i = 1; i < matrix.GetLength(0); i++)
+            {
+				prefixSum[i, 0] = matrix[i, 0] + prefixSum[i - 1, 0];
+            }
+			for ( int i = 1; i < matrix.GetLength(1); i++)
+            {
+				prefixSum[0, i] = matrix[0, i] + prefixSum[0, i - 1];
+            }
+			// Now fill all other cells
+			for ( int i = 1; i<matrix.GetLength(0); i++)
+            {
+				for ( int j = 1; j<matrix.GetLength(1); j++)
+                {
+					prefixSum[i, j] = prefixSum[i - 1, j] + prefixSum[i, j - 1] - prefixSum[i - 1, j - 1] + matrix[i,j];
+                }
+            }
+
+			// Now get the max sum for given size
+			int maxSum = int.MinValue;
+
+			for ( int i=size-1; i<matrix.GetLength(0); i++)
+            {
+				for ( int j=size-1; j < matrix.GetLength(1); j++)
+                {
+					int thisSum = prefixSum[i, j];
+					if (i - size >= 0)
+						thisSum -= prefixSum[i - size,j];
+					if (j - size >= 0)
+						thisSum -= prefixSum[i, j - size];
+					if (i - size >= 0 && j - size >= 0)
+						thisSum += prefixSum[i - size, j - size];
+
+					if (thisSum > maxSum)
+						maxSum = thisSum;
+                }
+            }
+
+			return maxSum;
+		}
+		public static void TestMaxSumSubMastrix()
+        {
+			int[,] matrix = new int[,] { { 2, 4 }, { 5, 6 }, { -3, 2 } };
+			int size = 2;
+
+			Console.WriteLine(MaximumSumSubmatrix(matrix, size));
+			Console.WriteLine("Expected: 17");
+        }
+		#endregion
+		#region NumbersInPi
+		/*
+		 * https://www.algoexpert.io/questions/Numbers%20In%20Pi
+		 */
+		public static int NumbersInPi(string pi, string[] numbers)
+		{
+			// Create a hash with numbers
+			HashSet<String> favoriteNumbers = new HashSet<string>();
+			foreach ( string number in numbers)
+				favoriteNumbers.Add(number);
+
+			// Create map with prefixes and minimum number of spaces found for each prefix
+			Dictionary<string, int> prefixMap = new Dictionary<string, int>();
+
+			// Call the method that will check the prefix
+			CheckMinSpacePrefix(pi, favoriteNumbers, prefixMap);
+
+			// Return what was computed to pi
+			return prefixMap[pi]>short.MaxValue ? -1 : prefixMap[pi];
+
+		}
+		public static void CheckMinSpacePrefix(string prefix, HashSet<string> favoriteNumbers, Dictionary<string,int> prefixMap)
+        {
+			bool found = false;
+
+			// Iterate thru prefix
+			for ( int i =1; i<=prefix.Length; i++)
+            {
+				// Check if prefix is found at favorite numbers
+				string subPrefix = prefix.Substring(0, i);
+				if (favoriteNumbers.Contains(subPrefix))
+                {
+					found = true;
+					int minSpaces;
+
+					// found whole prefix?
+					if (subPrefix.Length==prefix.Length)
+                    {
+						minSpaces=0;
+                    }
+					else
+                    {
+						string sufix = prefix.Substring(i);
+						CheckMinSpacePrefix(sufix, favoriteNumbers, prefixMap);
+						minSpaces = 1 + prefixMap[sufix];
+					}
+
+					// Save 
+					if (prefixMap.ContainsKey(prefix))
+						prefixMap[prefix] = Math.Min(prefixMap[prefix], minSpaces);
+                    else
+						prefixMap.Add(prefix, minSpaces);
+                }
+            }
+
+			if (!found)
+				prefixMap.Add(prefix, short.MaxValue);
+
+        }
+		public static void TestNumbersInPi()
+        {
+			string pi = "3141592653589793238462643383279";
+			string[] numbers = new string[] { "314159265358979323846", "26433", "8", "3279", "314159265", "35897932384626433832", "79" };
+			Console.WriteLine(NumbersInPi(pi, numbers));
+			Console.WriteLine("Expected: 2");
+
+
+			numbers = new string[] { "3141", "1512", "159", "793", "12412451", "8462643383279" };
+			pi = "3141592653589793238462643383279";
+			Console.WriteLine(NumbersInPi(pi, numbers));
+			Console.WriteLine("Expected: -1");
+
+		}
+		#endregion
+		#region DiskStacking
+		/*
+		 * https://www.algoexpert.io/questions/Disk%20Stacking
+		 * 
+		 *  int[] disk: [width, depth, height]
+		 */
+		public static List<int[]> DiskStacking(List<int[]> disks)
+		{
+			// Sort list by disks width - firt array dimension
+			disks.Sort((x,y)=>x[0].CompareTo(y[0]));
+
+			// Store max height and maxStack achieved
+			int maxHeight = int.MinValue;
+			List<int[]> maxStack = new List<int[]>();
+
+			// Test starting with each disk - from smaller to greater
+			for ( int i=0; i<disks.Count; i++)
+            {
+				int thisHeight = 0;
+				List<int[]> thisStack = new List<int[]>();
+
+				thisHeight += disks[i][2];
+				thisStack.Add(disks[i]);
+
+				// Tests all other disks that can stack
+				for ( int j = i+1; j<disks.Count; j++)
+                {
+					if (disks[j][0] > thisStack[thisStack.Count-1][0] && disks[j][1] > thisStack[thisStack.Count - 1][1] && disks[j][2] > thisStack[thisStack.Count - 1][2])
+					{
+						thisHeight += disks[j][2];
+						thisStack.Add(disks[j]);
+					}
+				}
+
+				// Have we found a higher stack?
+				if ( thisHeight > maxHeight)
+                {
+					maxHeight = thisHeight;
+					maxStack = thisStack;
+                }
+            }
+
+			return maxStack;
+		}
+		public static void TestDiskStacking()
+        {
+			List<int[]> disks = new List<int[]>() {
+				new int[]{ 2, 1, 2 },
+				new int[]{ 3, 2, 3 },
+				new int[]{ 2, 2, 8 },
+				new int[]{ 2, 3, 4 },
+				new int[]{ 1, 3, 1 },
+				new int[]{ 4, 4, 5 }
+			};
+
+			Console.WriteLine("[" + String.Join(",", DiskStacking(disks).Select(p => "[" + string.Join(", ", p) + "]")) + "]");
+			Console.WriteLine("Expected: [[2, 1, 2], [3, 2, 3], [4, 4, 5]]");
+        }
+		#endregion
 		#region KnapSackProblem
 		/*
 		 *  https://www.algoexpert.io/questions/Knapsack%20Problem
@@ -474,8 +702,10 @@ namespace AlgoTests
 
 			// Memo array f, from 0 to n.
 			int[] f = new int[n + 1];
+
 			// Init f[0] with 0 ( zero coins to make change for zero ).
 			f[0] = 0;
+
 			// All other should be set to infinite ( infinite zero coins - will be resseted as the algo runs )
 			// BE CAREFULL with MaxValue. Int32.MaxValue + 1 result negative integer!!!!!
 			for (int i = 1; i <= n; i++)
@@ -554,7 +784,7 @@ namespace AlgoTests
 					// Check if coin is lower or equal denomination
 					if ( coin <= a )
                     {
-						// Add this possibility to memo array - one possibility ( with this coin ) plus all possibilities already computed for this amount subtractin this coin
+						// Add this possibility to memo array - one possibility ( with this coin ) plus all possibilities already computed for this amount subtracting this coin
 						f[a] += f[a - coin];
 					}
                 }

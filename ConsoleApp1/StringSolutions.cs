@@ -7,6 +7,85 @@ namespace AlgoTests
 {
     class StringSolutions
     {
+        #region LongestSubstring
+        public static string LongestSubstringWithoutDuplication(string str)
+        {
+            // pointer to longest string found
+            int longestStart = 0;
+            int longestLenght = 0;
+
+            // pointer to current string beeing searched
+            int thisStart = 0;
+            int thisLenght = 0;
+
+            // Traverse input string
+            int i = 0;
+            while ( i < str.Length) 
+            {
+                // Map with last position each char was found
+                var map = new Dictionary<char, int>();
+
+                // Loop substring
+                while (i < str.Length)
+                {
+                    // Check if we found a duplicated char
+                    if (map.ContainsKey(str[i]))
+                    {
+                        // Check if current substring beeing searched is greater than what we have seen before
+                        if (thisLenght > longestLenght)
+                        {
+                            // Save its start and lenght
+                            longestLenght = thisLenght;
+                            longestStart = thisStart;
+                        }
+
+                        // Now we need to setup a new search from the next character after the first position of the duplicated one
+                        thisStart = map[str[i]] + 1;
+                        thisLenght = 0;
+                        i = thisStart;
+                        break;
+
+                    }
+                    // No duplicates up to here
+                    else
+                    {
+                        // Add char to map, increase substring lenght
+                        map.Add(str[i], i);
+                        thisLenght++;
+                    }
+
+                    i++;
+
+                }
+            }
+
+            // Check if current substring beeing searched is greater than what we have seen before
+            if (thisLenght > longestLenght)
+            {
+                // Save its start and lenght
+                longestLenght = thisLenght;
+                longestStart = thisStart;
+            }
+
+            return str.Substring(longestStart, longestLenght);
+
+        }
+        public static void TestLongestSubstring() 
+        {
+            Console.WriteLine(LongestSubstringWithoutDuplication("abc"));
+            Console.WriteLine("Expected: abc");
+
+            Console.WriteLine(LongestSubstringWithoutDuplication("clementisacap"));
+            Console.WriteLine("Expected: mentisac");
+
+            Console.WriteLine(LongestSubstringWithoutDuplication("qwertyuiop"));
+            Console.WriteLine("Expected: qwertyuiop");
+
+            Console.WriteLine(LongestSubstringWithoutDuplication("qwertyuiopqwertyuiopasdqwertyuiopasdfghjqwertyuiopasdfghjkl"));
+            Console.WriteLine("Expected: qwertyuiopasdfghjkl");
+
+        }
+        #endregion
         #region MinimumCharactersForWords
         /*
          * https://www.algoexpert.io/questions/Minimum%20Characters%20For%20Words
