@@ -963,6 +963,64 @@ namespace AlgoTests
 
         }
         #endregion
+        #region MoveElementToEnd
+        /*
+         *
+         * You're given an array of integers and an integer. Write a function that moves
+         * all instances of that integer in the array to the end of the array and returns
+         * the array.
+         *
+         * The function should perform this in place (i.e., it should mutate the input
+         * array) and doesn't need to maintain the order of the other integers.
+         *          * 
+         */
+        public static List<int> MoveElementToEnd(List<int> array, int toMove)
+        {
+            int p1 = 0;
+            int p2 = array.Count - 1;
+
+            while (p1 < p2 - 1)
+            {
+                while (array[p2] == toMove && p1 < p2 - 1)
+                    p2--;
+                while (array[p1] != toMove && p1 < p2 - 1)
+                    p1++;
+
+                if (array[p1] == toMove && array[p2] != toMove)
+                {
+                    int tmp = array[p2];
+                    array[p2] = array[p1];
+                    array[p1] = tmp;
+                }
+
+            }
+
+            // Write your code here.
+            return array;
+        }
+        public static void TestMoveElementToEnd()
+        {
+            Console.WriteLine(String.Join(",", MoveElementToEnd2(new List<int> { 1, 2, 3, 4, 5, 3, 5, 6, 7, 3, 8, 7, 6, 3, 4, 5, 6 }, 3)));
+        }
+        public static List<int> MoveElementToEnd2(List<int> array, int toMove)
+        {
+
+            int moved = 0;
+
+            for (int i = 0; i < array.Count - 1 - moved; i++)
+            {
+                if (array[i] == toMove)
+                {
+                    array.Add(array[i]);
+                    array.RemoveAt(i);
+                    i--;
+                    moved++;
+                }
+            }
+
+            return array;
+        }
+        #endregion
         #region Other
         /*
          *  Return True if array is Monotonic ( sorted )
@@ -1047,40 +1105,6 @@ namespace AlgoTests
 
             // Write your code here.
             return new int[] { arrayOne[pm1], arrayTwo[pm2]};
-        }
-        /*
-         *
-         * You're given an array of integers and an integer. Write a function that moves
-         * all instances of that integer in the array to the end of the array and returns
-         * the array.
-         *
-         * The function should perform this in place (i.e., it should mutate the input
-         * array) and doesn't need to maintain the order of the other integers.
-         *          * 
-         */
-        public static List<int> MoveElementToEnd(List<int> array, int toMove)
-        {
-            int p1 = 0;
-            int p2 = array.Count-1;
-
-            while ( p1 < p2-1)
-            {
-                while (array[p2] == toMove && p1 < p2 -1)
-                    p2--;
-                while (array[p1] != toMove && p1 < p2 - 1)
-                    p1++;
-
-                if ( array[p1] == toMove && array[p2] != toMove)
-                {
-                    int tmp = array[p2];
-                    array[p2] = array[p1];
-                    array[p1] = tmp;
-                }
-
-            }
-
-            // Write your code here.
-            return array;
         }
         #endregion
     }
