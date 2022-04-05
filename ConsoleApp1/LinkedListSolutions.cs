@@ -18,6 +18,73 @@ namespace AlgoTests
 			}
 		}
 		#endregion
+		#region FindTheLoop
+		/*
+		 * https://www.algoexpert.io/questions/Find%20Loop
+		 */
+		public static LinkedList FindLoop(LinkedList head)
+		{
+			if (head == null || head.Next == null)
+				return head;
+
+			LinkedList p1 = head.Next;
+			LinkedList p2 = head.Next.Next;
+
+			while (p1 != p2)
+			{
+				p1 = p1.Next;
+				p2 = p2.Next.Next;
+			}
+
+			p1 = head;
+
+			while (p1 != p2)
+			{
+				p1 = p1.Next;
+				p2 = p2.Next;
+			}
+
+			return p1;
+		}
+
+		// The following solution does NOT respect the Space Complexity stated of O(1)
+		public static LinkedList FindLoop0(LinkedList head)
+		{
+			if (head == null)
+				return head;
+
+			HashSet<LinkedList> visited = new HashSet<LinkedList>();
+
+			while (head != null)
+			{
+				if (visited.Contains(head))
+					return head;
+
+				visited.Add(head);
+				head = head.Next;
+			}
+
+			return head;
+		}
+		public static void TestFindTheLoop()
+		{
+			LinkedList p1 = new LinkedList(0);
+			LinkedList head = p1;
+			LinkedList pLoop = null;
+			for (int i = 1; i < 10; i++)
+			{
+				LinkedList p2 = new LinkedList(i);
+				p1.Next = p2;
+				p1 = p2;
+				if (i == 4)
+					pLoop = p2;
+			}
+			p1.Next = pLoop;
+
+			Console.WriteLine(FindLoop(head).Value);
+			Console.WriteLine("Expected: 4");
+		}
+		#endregion
 		#region ReverseLinkedList
 		public static LinkedList ReverseLinkedList(LinkedList head)
 		{
@@ -117,8 +184,8 @@ namespace AlgoTests
 			LinkedList l9 = new LinkedList(9);
 			//LinkedList l4b = new LinkedList(4);
 			//LinkedList l5 = new LinkedList(5);
-			//l9.next = l4b;
-			//l4b.next = l5;
+			//l9.Next = l4b;
+			//l4b.Next = l5;
 
 			LinkedList Result = SumOfLinkedLists(l2, l9);
 
